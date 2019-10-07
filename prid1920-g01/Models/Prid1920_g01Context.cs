@@ -18,11 +18,6 @@ namespace prid1920_g01.Models
 
             base.OnModelCreating(modelBuilder);
 
-            // modelBuilder.Entity<User>(entity => {
-            //     entity.HasIndex(e => e.Pseudo).HasName("X_pseudo").IsUnique();
-            // }
-            // );
-
             modelBuilder
                 .Entity<User>()
                 .HasIndex(u => u.Email)

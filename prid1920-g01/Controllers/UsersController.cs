@@ -44,7 +44,7 @@ namespace prid1920_g01.Controllers
         public async Task<ActionResult<UserDTO>> GetOne(string pseudo)
         {
 
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.Where(u => u.Pseudo == pseudo).SingleOrDefaultAsync();
 
             if (user == null)
 

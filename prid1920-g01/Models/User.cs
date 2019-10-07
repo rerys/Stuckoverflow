@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace prid1920_g01.Models
 {
@@ -52,7 +53,7 @@ namespace prid1920_g01.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var currContext = validationContext.GetService(typeof(DbContext));
+            Prid1920_g01Context currContext = validationContext.GetService(typeof(DbContext)) as Prid1920_g01Context;
             Debug.Assert(currContext != null);
             if (BirthDate.HasValue && BirthDate.Value.Date > DateTime.Today)
                 yield return new ValidationResult("Can't be born in the future in this reality", new[] { nameof(BirthDate) });
@@ -65,7 +66,14 @@ namespace prid1920_g01.Models
             if(FirstName == null && LastName != null){
                 yield return new ValidationResult("you must have a FirstName", new[] { nameof(FirstName) });
             }
-
+            var existPseudo = (from u in currContext.Users  where Pseudo == this.Pseudo select u).SingleOrDefault(); 
+            if(existPseudo != null){
+                yield return new ValidationResult("Pseudo already used", new[] { nameof(Pseudo) });
+            }
+            var existEmail = (from u in currContext.Users where Email == this.Email select u).SingleOrDefault(); 
+            if(existEmail != null){
+                yield return new ValidationResult("Email already used", new[] { nameof(Email) });
+            }
                 
         }
     }

@@ -14,11 +14,14 @@ using System.Text;
 
 using System.Threading.Tasks;
 
-namespace PRID_Framework {
+namespace PRID_Framework
+{
 
-    public static class DbContextExtentions {
+    public static class DbContextExtentions
+    {
 
-        public static ValidationErrors SaveChangesWithValidation(this DbContext context) {
+        public static ValidationErrors SaveChangesWithValidation(this DbContext context)
+        {
 
             var result = context.ExecuteValidation();
 
@@ -30,7 +33,8 @@ namespace PRID_Framework {
 
         }
 
-        public static async Task<ValidationErrors> SaveChangesAsyncWithValidation(this DbContext context) {
+        public static async Task<ValidationErrors> SaveChangesAsyncWithValidation(this DbContext context)
+        {
 
             var result = context.ExecuteValidation();
 
@@ -41,16 +45,17 @@ namespace PRID_Framework {
             return result;
 
         }
-
-        private static ValidationErrors ExecuteValidation(this DbContext context) {
+        private static ValidationErrors ExecuteValidation(this DbContext context)
+        {
 
             var result = new List<ValidationResult>();
 
             foreach (var entry in context.ChangeTracker.Entries().Where(
 
-                e => (e.State == EntityState.Added) || (e.State == EntityState.Modified))
+                e => (e.State == EntityState.Added) || (e.State == EntityState.Modified)).ToList()
 
-                ) {
+            )
+            {
 
                 var entity = entry.Entity;
 
@@ -60,7 +65,8 @@ namespace PRID_Framework {
 
                 var entityErrors = new List<ValidationResult>();
 
-                if (!Validator.TryValidateObject(entity, valContext, entityErrors, true)) {
+                if (!Validator.TryValidateObject(entity, valContext, entityErrors, true))
+                {
 
                     result.AddRange(entityErrors);
 
@@ -72,13 +78,16 @@ namespace PRID_Framework {
 
         }
 
-        private static ValidationErrors ToValidationErrors(this IList<ValidationResult> result) {
+        private static ValidationErrors ToValidationErrors(this IList<ValidationResult> result)
+        {
 
             var errors = new Dictionary<String, IList<String>>();
 
-            foreach (var err in result) {
+            foreach (var err in result)
+            {
 
-                foreach (var name in err.MemberNames) {
+                foreach (var name in err.MemberNames)
+                {
 
                     if (!errors.ContainsKey(name))
 
@@ -93,6 +102,9 @@ namespace PRID_Framework {
             return new ValidationErrors(errors);
 
         }
+
+
+
 
     }
 
