@@ -27,10 +27,20 @@ namespace prid1920_g01
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Prid1920_g01Context>(opt =>
-                opt.UseInMemoryDatabase("Prid1920_g01"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // In production, the Angular files will be served from this directory
+
+
+            // services.AddDbContext<Prid1920_g01Context>(opt => opt.UseSqlServer(
+            //     Configuration.GetConnectionString("Prid1920-g01-mssql"))
+            // );
+
+            services.AddDbContext<Prid1920_g01Context>(opt => opt.UseMySql(
+                Configuration.GetConnectionString("Prid1920-g01-mysql"))
+            );
+
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";

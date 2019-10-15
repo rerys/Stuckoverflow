@@ -22,13 +22,6 @@ namespace prid1920_g01.Controllers
         {
             _context = context;
 
-            if (_context.Users.Count() == 0)
-            {
-                // Create a new TodoItem if collection is empty,
-                // which means you can't delete all TodoItems.
-                _context.Users.Add(new User { Pseudo = "Benito", Password = "Ben", Email = "Ben@epfc.eu", LastName = "Penelle", FirstName = "Ben", Reputation = 1 });
-                _context.SaveChanges();
-            }
         }
 
 
