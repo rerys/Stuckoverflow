@@ -43,6 +43,8 @@ namespace prid1920_g01.Migrations
 
                     b.Property<int>("Reputation");
 
+                    b.Property<int>("Role");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -62,7 +64,8 @@ namespace prid1920_g01.Migrations
                             LastName = "Penelle",
                             Password = "Ben",
                             Pseudo = "Benito",
-                            Reputation = 1
+                            Reputation = 1,
+                            Role = 0
                         },
                         new
                         {
@@ -72,7 +75,8 @@ namespace prid1920_g01.Migrations
                             LastName = "Lacroix",
                             Password = "Bruno",
                             Pseudo = "Bruno",
-                            Reputation = 1
+                            Reputation = 1,
+                            Role = 0
                         });
                 });
 #pragma warning restore 612, 618

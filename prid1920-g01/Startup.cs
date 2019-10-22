@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using prid1920_g01.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace prid1920_g01
 {
@@ -45,6 +43,40 @@ namespace prid1920_g01
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            //------------------------------
+            // configure jwt authentication
+            //------------------------------
+            var key = Encoding.ASCII.GetBytes("my-super-secret-key");
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = true;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                                {
+                                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                                    {
+                                        context.Response.Headers.Add("Token-Expired", "true");
+                                    }
+                                    return Task.CompletedTask;
+                                }
+                    };
+                });
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -62,6 +94,7 @@ namespace prid1920_g01
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -24,6 +24,8 @@ namespace prid1920_g01.Models {
                 BirthDate = user.BirthDate,
 
                 Reputation = user.Reputation,
+                
+                Role = user.Role,
 
             };
 
