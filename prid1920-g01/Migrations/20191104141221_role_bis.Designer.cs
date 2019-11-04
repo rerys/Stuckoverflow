@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using prid1920_g01.Models;
 
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    partial class Prid1920_g01ContextModelSnapshot : ModelSnapshot
+    [Migration("20191104141221_role_bis")]
+    partial class role_bis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

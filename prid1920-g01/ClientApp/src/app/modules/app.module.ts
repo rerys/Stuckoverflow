@@ -4,21 +4,31 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutes } from '../routing/app.routing';
 
 import { AppComponent } from '../components/app/app.component';
 
+import { JwtInterceptor } from '../interceptors/jwt.interceptor';
+
 import { NavMenuComponent } from '../components/nav-menu/nav-menu.component';
 
 import { HomeComponent } from '../components/home/home.component';
+
+import { LoginComponent } from '../components/login/login.component';
 
 import { CounterComponent } from '../components/counter/counter.component';
 
 import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 
 import { UserListComponent } from '../components/userlist/userlist.component';
+
+import { UnknownComponent } from '../components/unknown/unknown.component';
+
+import { RestrictedComponent } from '../components/restricted/restricted.component';
 
 @NgModule({
 
@@ -34,7 +44,13 @@ import { UserListComponent } from '../components/userlist/userlist.component';
 
     FetchDataComponent,
 
-    UserListComponent
+    LoginComponent,
+
+    UserListComponent,
+
+    UnknownComponent,
+
+    RestrictedComponent
 
   ],
 
@@ -46,11 +62,17 @@ import { UserListComponent } from '../components/userlist/userlist.component';
 
     FormsModule,
 
+    ReactiveFormsModule,
+
     AppRoutes
 
   ],
 
-  providers: [],
+  providers: [
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+
+  ],
 
   bootstrap: [AppComponent]
 
