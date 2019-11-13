@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { User } from '../models/user';
 
-import { map } from 'rxjs/operators';
+import { map, flatMap, catchError } from 'rxjs/operators';
+
+import { Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 
@@ -14,9 +16,77 @@ export class UserService {
 
   getAll() {
 
-    return this.http.get<User[]>(`${this.baseUrl}api/users`)
+    return this.http.get<User[]>(`${this.baseUrl}api/users`).pipe(
 
-      .pipe(map(res => res.map(u => new User(u))));
+      map(res => res.map(u => new User(u)))
+
+    );
+
+  }
+
+  getByPseudo(pseudo: string) {
+
+    return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
+
+      map(u => !u ? null : new User(u)),
+
+      catchError(err => of(null))
+
+    );
+
+  }
+
+  public update(u: User): Observable<boolean> {
+
+    return this.http.put<User>(`${this.baseUrl}api/users/${u.pseudo}`, u).pipe(
+
+      map(res => true),
+
+      catchError(err => {
+
+        console.error(err);
+
+        return of(false);
+
+      })
+
+    );
+
+  }
+
+  public delete(u: User): Observable<boolean> {
+
+    return this.http.delete<boolean>(`${this.baseUrl}api/users/${u.pseudo}`).pipe(
+
+      map(res => true),
+
+      catchError(err => {
+
+        console.error(err);
+
+        return of(false);
+
+      })
+
+    );
+
+  }
+
+  public add(u: User): Observable<boolean> {
+
+    return this.http.post<User>(`${this.baseUrl}api/users`, u).pipe(
+
+      map(res => true),
+
+      catchError(err => {
+
+        console.error(err);
+
+        return of(false);
+
+      })
+
+    );
 
   }
 

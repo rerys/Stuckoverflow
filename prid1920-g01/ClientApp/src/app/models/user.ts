@@ -23,6 +23,8 @@ export class User {
 
   birthDate: string;
 
+  reputation: string;
+
   role: Role;
 
   token: string;
@@ -46,6 +48,8 @@ export class User {
       this.birthDate = data.birthDate &&
 
         data.birthDate.length > 10 ? data.birthDate.substring(0, 10) : data.birthDate;
+
+      this.reputation = data.reputation;
 
 
       this.role = data.role || Role.Member;

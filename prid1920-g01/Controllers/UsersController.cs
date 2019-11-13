@@ -79,6 +79,8 @@ namespace prid1920_g01.Controllers
 
                 Reputation = data.Reputation,
 
+                Role = data.Role
+
             };
 
             _context.Users.Add(newUser);
@@ -121,6 +123,11 @@ namespace prid1920_g01.Controllers
             user.BirthDate = userDTO.BirthDate;
 
             user.Reputation = userDTO.Reputation;
+
+            if (userDTO.Password != null)
+            {
+                user.Password = userDTO.Password;
+            }
 
             var res = await _context.SaveChangesAsyncWithValidation();
 

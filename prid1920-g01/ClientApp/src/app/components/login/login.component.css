@@ -1,0 +1,9 @@
+form {
+
+    width: 30%;
+
+    display: grid;
+
+    grid-row-gap: 10px;
+
+}

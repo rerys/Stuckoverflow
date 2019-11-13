@@ -1,14 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { AuthenticationService } from '../../services/authentication.service';
 
-@Component({ templateUrl: 'login.component.html' })
+@Component({
 
-export class LoginComponent implements OnInit, AfterViewInit {
+    templateUrl: 'login.component.html',
+
+    styleUrls: ['login.component.css']
+
+})
+
+export class LoginComponent implements OnInit {
 
     loginForm: FormGroup;
 
@@ -16,13 +22,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     submitted = false;  // retient si le formulaire a été soumis ; utilisé pour n'afficher les 
 
-                        // erreurs que dans ce cas-là (voir template)
+    // erreurs que dans ce cas-là (voir template)
 
     returnUrl: string;
 
-    error = '';
+    ctlPseudo: FormControl;
 
-    @ViewChild('pseudo', { static: true }) pseudo: ElementRef;
+    ctlPassword: FormControl;
 
     constructor(
 
@@ -48,11 +54,33 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
 
+        /**
+
+         * Ici on construit le formulaire réactif. On crée un 'group' dans lequel on place deux
+
+         * 'controls'. Remarquez que la méthode qui crée les controls prend comme paramêtre une
+
+         * valeur initiale et un tableau de validateurs. Les validateurs vont automatiquement
+
+         * vérifier les valeurs encodées par l'utilisateur et reçues dans les FormControls grâce
+
+         * au binding, en leur appliquant tous les validateurs enregistrés. Chaque validateur
+
+         * qui identifie une valeur non valide va enregistrer une erreur dans la propriété
+
+         * 'errors' du FormControl. Ces erreurs sont accessibles par le template grâce au binding.
+
+         */
+
+        this.ctlPseudo = this.formBuilder.control('', Validators.required);
+
+        this.ctlPassword = this.formBuilder.control('', Validators.required);
+
         this.loginForm = this.formBuilder.group({
 
-            pseudo: ['', Validators.required],
+            pseudo: this.ctlPseudo,
 
-            password: ['', Validators.required]
+            password: this.ctlPassword
 
         });
 
@@ -62,16 +90,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     }
 
-    ngAfterViewInit() {
-
-        setTimeout(_ => this.pseudo && this.pseudo.nativeElement.focus());
-
-    }
-
     // On définit ici un getter qui permet de simplifier les accès aux champs du formulaire dans le HTML
 
     get f() { return this.loginForm.controls; }
 
+    /**
+
+     * Cette méthode est bindée sur l'événement onsubmit du formulaire. On va y faire le
+
+     * login en faisant appel à AuthenticationService.
+
+     */
 
     onSubmit() {
 
@@ -99,9 +128,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
                 error => {
 
-                    console.log(error);
+                    const errors = error.error.errors;
 
-                    this.error = error.error.errors.Pseudo || error.error.errors.Password;
+                    for (let field in errors) {
+
+                        this.loginForm.get(field.toLowerCase()).setErrors({ custom: errors[field] })
+
+                    }
 
                     this.loading = false;
 
