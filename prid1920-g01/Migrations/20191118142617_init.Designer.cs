@@ -9,8 +9,8 @@ using prid1920_g01.Models;
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    [Migration("20191015143257_data")]
-    partial class data
+    [Migration("20191118142617_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,8 @@ namespace prid1920_g01.Migrations
 
                     b.Property<int>("Reputation");
 
+                    b.Property<int>("Role");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -54,28 +56,6 @@ namespace prid1920_g01.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Email = "Ben@epfc.eu",
-                            FirstName = "Ben",
-                            LastName = "Penelle",
-                            Password = "Ben",
-                            Pseudo = "Benito",
-                            Reputation = 1
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Email = "Bruno@epfc.eu",
-                            FirstName = "Bru",
-                            LastName = "Lacroix",
-                            Password = "Bruno",
-                            Pseudo = "Bruno",
-                            Reputation = 1
-                        });
                 });
 #pragma warning restore 612, 618
         }

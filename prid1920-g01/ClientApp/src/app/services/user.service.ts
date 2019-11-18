@@ -36,6 +36,18 @@ export class UserService {
 
   }
 
+  getByEmail(email: string) {
+
+    return this.http.get<User>(`${this.baseUrl}api/users/email/${email}`).pipe(
+
+      map(u => !u ? null : new User(u)),
+
+      catchError(err => of(null))
+
+    );
+
+  }
+
   public update(u: User): Observable<boolean> {
 
     return this.http.put<User>(`${this.baseUrl}api/users/${u.pseudo}`, u).pipe(
@@ -75,6 +87,24 @@ export class UserService {
   public add(u: User): Observable<boolean> {
 
     return this.http.post<User>(`${this.baseUrl}api/users`, u).pipe(
+
+      map(res => true),
+
+      catchError(err => {
+
+        console.error(err);
+
+        return of(false);
+
+      })
+
+    );
+
+  }
+
+  public addNewMember(u: User): Observable<boolean> {
+
+    return this.http.post<User>(`${this.baseUrl}api/users/signup`, u).pipe(
 
       map(res => true),
 

@@ -18,11 +18,6 @@ namespace prid1920_g01.Models
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().HasData(
-                new User { Id = 10, Pseudo = "Benito", Password = "Ben", Email = "Ben@epfc.eu", LastName = "Penelle", FirstName = "Ben", Reputation = 1, Role = Role.Admin },
-                new User { Id = 11, Pseudo = "Bruno", Password = "Bruno", Email = "Bruno@epfc.eu", LastName = "Lacroix", FirstName = "Bru", Reputation = 1 }
-            );
-
             modelBuilder
                 .Entity<User>()
                 .HasIndex(u => u.Email)

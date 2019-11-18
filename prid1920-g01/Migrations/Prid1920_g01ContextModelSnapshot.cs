@@ -54,30 +54,6 @@ namespace prid1920_g01.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Email = "Ben@epfc.eu",
-                            FirstName = "Ben",
-                            LastName = "Penelle",
-                            Password = "Ben",
-                            Pseudo = "Benito",
-                            Reputation = 1,
-                            Role = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Email = "Bruno@epfc.eu",
-                            FirstName = "Bru",
-                            LastName = "Lacroix",
-                            Password = "Bruno",
-                            Pseudo = "Bruno",
-                            Reputation = 1,
-                            Role = 0
-                        });
                 });
 #pragma warning restore 612, 618
         }

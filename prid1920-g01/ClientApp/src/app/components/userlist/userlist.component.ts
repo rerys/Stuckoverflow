@@ -103,7 +103,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
     edit(user: User) {
 
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false } });
+        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false, signup: false } });
 
         dlg.beforeClose().subscribe(res => {
 
@@ -159,7 +159,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
         const user = new User({});
 
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true } });
+        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: false } });
 
         dlg.beforeClose().subscribe(res => {
 

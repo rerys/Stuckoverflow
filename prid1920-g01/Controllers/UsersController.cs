@@ -56,6 +56,23 @@ namespace prid1920_g01.Controllers
         }
 
 
+        //Read
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<UserDTO>> GetOneByEmail(string email)
+        {
+
+            var user = await _context.Users.Where(u => u.Email == email).SingleOrDefaultAsync();
+
+            if (user == null)
+
+                return NotFound();
+
+            return user.ToDTO();
+
+        }
+
+
+
         //Create
         [Authorized(Role.Admin)]
         [HttpPost]
@@ -95,6 +112,44 @@ namespace prid1920_g01.Controllers
 
         }
 
+        [AllowAnonymous]
+        [HttpPost("signup")]
+        public async Task<ActionResult<UserDTO>> PostUserSignUp(UserDTO data)
+        {
+
+            var newUser = new User()
+            {
+                Id = data.Id,
+
+                Pseudo = data.Pseudo,
+
+                Password = data.Password,
+
+                Email = data.Email,
+
+                LastName = data.LastName,
+
+                FirstName = data.FirstName,
+
+                BirthDate = data.BirthDate,
+
+                Reputation = 1,
+
+                Role = Role.Member
+
+            };
+
+            _context.Users.Add(newUser);
+
+            var res = await _context.SaveChangesAsyncWithValidation();
+
+            if (!res.IsEmpty)
+
+                return BadRequest(res);
+
+            return CreatedAtAction(nameof(GetOne), new { pseudo = newUser.Pseudo }, newUser.ToDTO());
+
+        }
 
         //Update
         [Authorized(Role.Admin)]

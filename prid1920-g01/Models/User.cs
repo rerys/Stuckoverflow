@@ -76,12 +76,12 @@ namespace prid1920_g01.Models
             {
                 yield return new ValidationResult("you must have a FirstName", new[] { nameof(FirstName) });
             }
-            var existPseudo = (from u in currContext.Users where Id != u.Id && Pseudo == this.Pseudo select u).SingleOrDefault();
+            var existPseudo = (from u in currContext.Users where Id != u.Id && u.Pseudo == this.Pseudo select u).SingleOrDefault();
             if (existPseudo != null)
             {
                 yield return new ValidationResult("Pseudo already used", new[] { nameof(Pseudo) });
             }
-            var existEmail = (from u in currContext.Users where Id != u.Id && Email == this.Email select u).SingleOrDefault();
+            var existEmail = (from u in currContext.Users where Id != u.Id && u.Email == this.Email select u).SingleOrDefault();
             if (existEmail != null)
             {
                 yield return new ValidationResult("Email already used", new[] { nameof(Email) });
