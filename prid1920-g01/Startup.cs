@@ -26,7 +26,7 @@ namespace prid1920_g01
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // In production, the Angular files will be served from this directory
 
 
@@ -34,9 +34,41 @@ namespace prid1920_g01
             //     Configuration.GetConnectionString("Prid1920-g01-mssql"))
             // );
 
-            services.AddDbContext<Prid1920_g01Context>(opt => opt.UseMySql(
-                Configuration.GetConnectionString("Prid1920-g01-mysql"))
-            );
+            // services.AddDbContext<Prid1920_g01Context>(opt => opt.UseMySql(
+            //     Configuration.GetConnectionString("Prid1920-g01-mysql"))
+            // );
+
+            services.AddDbContext<Prid1920_g01Context>(opt => {
+
+                opt.UseLazyLoadingProxies();
+
+                // opt.UseSqlServer(Configuration.GetConnectionString("prid1920-tuto-mssql"));
+
+                opt.UseMySql(Configuration.GetConnectionString("Prid1920-g01-mysql"));
+
+            });
+
+            services.AddMvc()
+
+                .AddJsonOptions(opt => {
+
+                    /*  
+
+                    ReferenceLoopHandling.Ignore: Json.NET will ignore objects in reference loops and not serialize them.
+
+                    The first time an object is encountered it will be serialized as usual but if the object is 
+
+                    encountered as a child object of itself the serializer will skip serializing it.
+
+                    See: https://stackoverflow.com/a/14205542
+
+                    */
+
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+                })
+
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             services.AddSpaStaticFiles(configuration =>
