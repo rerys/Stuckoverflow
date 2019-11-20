@@ -53,7 +53,7 @@ namespace prid1920_g01.Models
             return new PostDTO
             {
 
-                Id = post.PostId,
+                Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
                 Timestamp = post.Timestamp,

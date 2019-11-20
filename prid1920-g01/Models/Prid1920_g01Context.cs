@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 
@@ -13,7 +15,7 @@ namespace prid1920_g01.Models
 
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Comment> Comments { get; set;}
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Tag> Tags { get; set; }
 
@@ -22,7 +24,7 @@ namespace prid1920_g01.Models
 
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Vote>().HasKey(v => new { v.Post.PostId, v.User.Id});
+            modelBuilder.Entity<Vote>().HasKey(v => new { PostId = v.PostId, UserId = v.UserId });
 
             modelBuilder
                 .Entity<User>()

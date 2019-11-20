@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace prid1920_g01.Models
 {
@@ -15,7 +16,23 @@ namespace prid1920_g01.Models
         [Required(ErrorMessage = "Required User")]
         public virtual User User { get; set; }
         [Required(ErrorMessage = "Required Post")]
-        public Post Post { get; set; }
+        public virtual Post Post { get; set; }
+
+        [NotMapped]
+        public int UserId
+        {
+            get
+            {return User.Id;}
+            set{ UserId = value;}
+        }
+
+        [NotMapped]
+        public int PostId
+        {
+            get { return Post.Id; }
+            set { PostId = value; }
+
+        }
 
 
 
