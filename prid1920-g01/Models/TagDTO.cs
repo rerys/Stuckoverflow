@@ -7,6 +7,6 @@ namespace prid1920_g01.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<string> Posts { get; set; }
+        public IEnumerable<PostDTO> Posts { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace prid1920_g01.Models{
         public DateTime? BirthDate{get;set;}
         public int Reputation{get;set;}
         public Role Role { get; set; }
-        public IEnumerable<string> Posts { get; set; }
-        public IEnumerable<string> Votes { get; set; }
-        public IEnumerable<string> Comments { get; set; } 
+        public IEnumerable<PostDTO> Posts { get; set; }
+        public IEnumerable<VoteDTO> Votes { get; set; }
+        public IEnumerable<CommentDTO> Comments { get; set; } 
     }
 }

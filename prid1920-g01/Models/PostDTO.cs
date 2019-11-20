@@ -11,10 +11,10 @@ namespace prid1920_g01.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public DateTime Timestamp { get; set; }
-        public string User { get; set; }
-        public IEnumerable<string> Tags { get; set; }
-        public IEnumerable<string> Votes { get; set; }
-        public IEnumerable<string> Comments { get; set; }
+        public UserDTO User { get; set; }
+        public IEnumerable<TagDTO> Tags { get; set; }
+        public IEnumerable<VoteDTO> Votes { get; set; }
+        public IEnumerable<CommentDTO> Comments { get; set; }
 
 
     }
