@@ -45,6 +45,10 @@ namespace prid1920_g01.Models
         public Role Role { get; set; } = Role.Member;
         [NotMapped]
         public string Token { get; set; }
+        public virtual IList<Post> Posts { get; set; } = new List<Post>();
+        public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
+        public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
+
 
         public int? Age
         {
