@@ -84,7 +84,7 @@ namespace prid1920_g01.Models
                 Title = post.Title,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                User = post.User.ToDTO(),
+               // User = post.User.ToDTO(),
                 Tags = post.Tags.ToDTO(),
                 Votes = post.Votes.ToDTO(),
                 Comments = post.Comments.ToDTO()
