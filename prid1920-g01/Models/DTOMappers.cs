@@ -225,8 +225,6 @@ namespace prid1920_g01.Models
         {
             return new VoteDTO
             {
-
-                Timestamp = vote.Timestamp,
                 UpDown = vote.UpDown,
                 User = vote.User.ToDTO(),
                 Post = vote.Post.ToDTO()
@@ -245,7 +243,6 @@ namespace prid1920_g01.Models
         {
             return new Vote
             {
-                Timestamp = v.Timestamp,
                 UpDown = v.UpDown,
                 User = v.User.ToOBJ(),
                 Post = v.Post.ToOBJ()

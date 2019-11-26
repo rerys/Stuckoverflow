@@ -9,8 +9,6 @@ namespace prid1920_g01.Models
 
     public class Vote : IValidatableObject
     {
-        [Required(ErrorMessage = "Required DateTime")]
-        public DateTime Timestamp { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "Required Vote")]
         public int UpDown { get; set; }
         [Required(ErrorMessage = "Required User")]
@@ -42,11 +40,6 @@ namespace prid1920_g01.Models
             {
                 yield return new ValidationResult("Vote only accept -1 or 1", new[] { nameof(UpDown) });
             }
-            if (Timestamp != DateTime.Now)
-            {
-                yield return new ValidationResult("Bad DateTime", new[] { nameof(Timestamp) });
-            }
-
         }
     }
 

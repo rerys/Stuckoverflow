@@ -39,6 +39,7 @@ namespace prid1920_g01.Controllers
         //méthode GET
         //retourne un Tag par son nom 
         //paramètre string "name" 
+        [Authorized(Role.Admin)]
         [HttpGet("{name}")]
         public async Task<ActionResult<TagDTO>> GetOne(string name)
         {
