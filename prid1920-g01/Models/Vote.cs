@@ -40,6 +40,12 @@ namespace prid1920_g01.Models
             {
                 yield return new ValidationResult("Vote only accept -1 or 1", new[] { nameof(UpDown) });
             }
+            if(UpDown == 1 && User.Reputation < 15){
+                yield return new ValidationResult("To vote up, you must have at least a reputation of 15", new[] { nameof(User) });
+            }
+            if(UpDown == -1 && User.Reputation < 30){
+                yield return new ValidationResult("To vote down, you must have at least a reputation of 30", new[] { nameof(User) });
+            }
         }
     }
 
