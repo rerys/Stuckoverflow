@@ -69,7 +69,7 @@ namespace prid1920_g01.Controllers
 
         //Delete d'un comment 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id, UserDTO currentUser)
+        public async Task<IActionResult> DeleteComment(int id, UserDTO currentUser)
         {
             //récuperation du commentaire dans le context 
             var comment = await _context.Comments.FindAsync(id);
