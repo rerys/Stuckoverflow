@@ -7,7 +7,7 @@ namespace prid1920_g01.Models
         public int Id { get; set; }
         public string Body { get; set; }
         public DateTime Timestamp { get; set; }
-        public string User { get; set; }
-        public string Post { get; set; }
+        public UserDTO User { get; set; }
+        public PostDTO Post { get; set; }
     }
 }

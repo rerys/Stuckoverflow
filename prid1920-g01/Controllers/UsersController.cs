@@ -9,7 +9,6 @@ using PRID_Framework;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
 using System.Security.Claims;
@@ -79,26 +78,7 @@ namespace prid1920_g01.Controllers
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO data)
         {
 
-            var newUser = new User()
-            {
-
-                Pseudo = data.Pseudo,
-
-                Password = data.Password,
-
-                Email = data.Email,
-
-                LastName = data.LastName,
-
-                FirstName = data.FirstName,
-
-                BirthDate = data.BirthDate,
-
-                Reputation = data.Reputation,
-
-                Role = data.Role
-
-            };
+            var newUser = data.ToOBJ();
 
             _context.Users.Add(newUser);
 
@@ -116,28 +96,10 @@ namespace prid1920_g01.Controllers
         [HttpPost("signup")]
         public async Task<ActionResult<UserDTO>> PostUserSignUp(UserDTO data)
         {
-
-            var newUser = new User()
-            {
-                Id = data.Id,
-
-                Pseudo = data.Pseudo,
-
-                Password = data.Password,
-
-                Email = data.Email,
-
-                LastName = data.LastName,
-
-                FirstName = data.FirstName,
-
-                BirthDate = data.BirthDate,
-
-                Reputation = 1,
-
-                Role = Role.Member
-
-            };
+            
+            var newUser = data.ToOBJ();
+            newUser.Reputation = 1;
+            newUser.Role = Role.Member;
 
             _context.Users.Add(newUser);
 
@@ -164,7 +126,7 @@ namespace prid1920_g01.Controllers
             var user = await _context.Users.Where(u => u.Pseudo == pseudo).SingleOrDefaultAsync();
 
             if (user == null)
-
+ 
                 return NotFound();
 
             user.Pseudo = userDTO.Pseudo;
