@@ -1,6 +1,5 @@
 using System;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -60,8 +59,9 @@ namespace prid1920_g01.Controllers
 
         //Update d'un vote
         [HttpPut("{userId, postId}")]
-        public async Task<IActionResult> PutVote(int userId, int postId, VoteDTO voteDTO, UserDTO currentUser)
+        public async Task<IActionResult> PutVote(int userId, int postId, VoteDTO voteDTO)
         {
+            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
             //Contrôle vote appartient à l'user
             if (voteDTO.User.Id != currentUser.Id) { return BadRequest(); }
             //Contrôle vote appartient à l'ID du user recherché 
@@ -92,10 +92,11 @@ namespace prid1920_g01.Controllers
 
         //Delete d'un vote
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteVote(int id, UserDTO currentUser)
+        public async Task<IActionResult> DeleteVote(int id)
         {
             //récuperation du vote dans le context 
             var vote = await _context.Votes.FindAsync(id);
+            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
             //Contrôle résultat du context 
             if (vote == null) { return NotFound(); }
             //Contrôle vote appartient à l'user
