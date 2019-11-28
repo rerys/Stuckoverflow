@@ -23,11 +23,14 @@ namespace prid1920_g01.Controllers
         }
 
         //GET = Liste tous les posts
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll()
         {
-            return (await _context.Posts.ToListAsync()).ToDTO();
-        }
+            var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
+            if (posts == null) { return NoContent(); }
+            return posts.ToDTO();
+        } 
 
         //GET = un seul post CA MARCHE PAS 
         [HttpGet("{title}")]

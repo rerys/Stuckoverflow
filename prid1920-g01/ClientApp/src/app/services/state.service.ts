@@ -7,5 +7,6 @@ import { MatTableState } from "../helpers/mattable.state";
 export class StateService {
 
     public userListState = new MatTableState('pseudo', 'asc', 5);
+    public questionListState = new MatTableState('title', 'asc', 5);
 
 }

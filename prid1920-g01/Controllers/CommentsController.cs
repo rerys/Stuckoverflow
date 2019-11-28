@@ -46,8 +46,9 @@ namespace prid1920_g01.Controllers
 
         //Update d'un comment
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutComment(int id, CommentDTO commentDTO, UserDTO currentUser)
+        public async Task<IActionResult> PutComment(int id, CommentDTO commentDTO)
         {
+            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
             //Contrôle comment appartient à l'user
             if (commentDTO.User.Id != currentUser.Id) { return BadRequest(); }
             //Contrôle commentaire appartient à l'ID du commentaire recherché 
@@ -69,8 +70,9 @@ namespace prid1920_g01.Controllers
 
         //Delete d'un comment 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteComment(int id, UserDTO currentUser)
+        public async Task<IActionResult> DeleteComment(int id) 
         {
+            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
             //récuperation du commentaire dans le context 
             var comment = await _context.Comments.FindAsync(id);
             //Contrôle résultat du context 
