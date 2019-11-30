@@ -5,6 +5,7 @@ import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 import { Post } from 'src/app/models/post';
 import { PostService } from 'src/app/services/post.service';
+import { EditPostComponent } from '../edit-post/edit-post.component';
 
 @Component({
     selector: 'app-questionsList',
@@ -15,7 +16,7 @@ import { PostService } from 'src/app/services/post.service';
 
 export class QuestionsListComponent implements AfterViewInit {
 
-    displayedColumns: string[] = ['title','body', 'timestamp'];
+    displayedColumns: string[] = ['title', 'body', 'timestamp'];
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -74,6 +75,20 @@ export class QuestionsListComponent implements AfterViewInit {
     //         this.filter = this.state.filter;
     //     });
     // }
-    
 
+    create() {
+        const post = new Post({});
+        const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true, add: false } });
+        dlg.beforeClose().subscribe(res => {
+            if (res) {
+                this.dataSource.data = [...this.dataSource.data, new Post(res)];
+                this.postService.add(res).subscribe(res => {
+                    if (!res) {
+                        this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+                        this.refresh();
+                    }
+                });
+            }
+        });
+    }
 }

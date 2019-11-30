@@ -19,6 +19,7 @@ import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
 import { QuestionsListComponent } from '../components/questionsList/questionsList.component';
+import { EditPostComponent } from '../components/edit-post/edit-post.component';
 
 @NgModule({
 
@@ -35,11 +36,12 @@ import { QuestionsListComponent } from '../components/questionsList/questionsLis
     RestrictedComponent,
     SetFocusDirective,
     EditUserComponent,
-    QuestionsListComponent
+    EditPostComponent,
+    QuestionsListComponent,
 
   ],
 
-  entryComponents: [EditUserComponent],
+  entryComponents: [EditUserComponent,EditPostComponent],
 
   imports: [
 
