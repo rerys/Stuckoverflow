@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using prid1920_g01.Models;
 using PRID_Framework;
 using Microsoft.AspNetCore.Authorization;
-
+using System;
 
 namespace prid1920_g01.Controllers
 {
@@ -22,7 +22,7 @@ namespace prid1920_g01.Controllers
             _context = context;
         }
 
-        //GET = Liste tous les posts
+        //Lists all the posts.
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll()
@@ -30,49 +30,37 @@ namespace prid1920_g01.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             if (posts == null) { return NoContent(); }
             return posts.ToDTO();
-        } 
-
-        //GET = un seul post CA MARCHE PAS 
-        [HttpGet("{title}")]
-        public async Task<ActionResult<PostDTO>> GetOne(string title)
-        {
-            var post = await _context.Posts.Where(u => u.Title == title).SingleOrDefaultAsync();
-            if (post == null)
-                return NotFound();
-            return post.ToDTO();
         }
 
-        //POST = créer un nouveau post
+        //Create new Post
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data)
         {
 
-            var newPost = new Post()
-            {
-                Title = data.Title,
-                Body = data.Body,
-            };
+            var newPost = data.ToOBJ();
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return CreatedAtAction(nameof(GetOne), new { Title = newPost.Title }, newPost.ToDTO());
-
+            return CreatedAtAction(nameof(GetAll), newPost.ToDTO());
         }
 
 
-        //PUT = modifie un post
-        [HttpPut("{title}")]
-        public async Task<IActionResult> PutPost(string title, PostDTO postDTO)
+        //Update a post
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPost(int id, PostDTO postDTO)
         {
-
-            if (title != postDTO.Title)
-                return BadRequest();
-            var post = await _context.Posts.Where(u => u.Title == title).SingleOrDefaultAsync();
+            var connectedUser = await _context.Users.FindAsync(User.Identity.Name);
+            if (postDTO.User.Id != connectedUser.Id) { return BadRequest(); }
+            if (id != postDTO.Id) { return BadRequest(); }
+            var post = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
             if (post == null)
                 return NotFound();
             post.Title = postDTO.Title;
             post.Body = postDTO.Body;
+            post.Timestamp = DateTime.Now;
+            post.User = postDTO.User.ToOBJ();
+            post.Tags = postDTO.Tags.ToOBJ();
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
@@ -80,11 +68,13 @@ namespace prid1920_g01.Controllers
         }
 
 
-        //DELETE = supprime un post
+        //Delete a post
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
+            var connectedUser = await _context.Users.FindAsync(User.Identity.Name);
+            if (post.User.Id != connectedUser.Id) { return BadRequest(); }
             if (post == null)
                 return NotFound();
             _context.Posts.Remove(post);

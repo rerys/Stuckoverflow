@@ -11,11 +11,11 @@ import { PostService } from 'src/app/services/post.service';
     templateUrl: './questionsList.component.html',
     styleUrls: ['./questionsList.component.css']
 })
- 
+
 
 export class QuestionsListComponent implements AfterViewInit {
 
-    displayedColumns: string[] = ['title', 'timestamp'];
+    displayedColumns: string[] = ['title','body', 'timestamp'];
     dataSource: MatTableDataSource<Post> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -24,13 +24,13 @@ export class QuestionsListComponent implements AfterViewInit {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor
-    (
-        private postService: PostService,
-        private stateService: StateService,
-        public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        (
+            private postService: PostService,
+            private stateService: StateService,
+            public dialog: MatDialog,
+            public snackBar: MatSnackBar
 
-    ) {
+        ) {
         this.state = this.stateService.questionListState;
     }
 
@@ -40,7 +40,7 @@ export class QuestionsListComponent implements AfterViewInit {
         this.dataSource.sort = this.sort;
 
         this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.title + ' ' + data.timestamp;
+            const str = data.title + ' ' + data.body + ' ' + data.timestamp;
             return str.toLowerCase().includes(filter);
         };
 
@@ -66,5 +66,14 @@ export class QuestionsListComponent implements AfterViewInit {
             this.dataSource.paginator.firstPage();
 
     }
+
+    // newest(){
+    //     this.postService.getQuestionsByNewest().subscribe(q => {
+    //         this.dataSource.data = q;
+    //         this.state.restoreState(this.dataSource);
+    //         this.filter = this.state.filter;
+    //     });
+    // }
+    
 
 }

@@ -17,12 +17,26 @@
             <input matInput (keyup)="filterChanged($event.target.value)" [value]="filter" placeholder="Filter" appSetFocus>
         </mat-form-field>
 
+        <div class="row mt-3">
+                <div class="col-12">
+            
+                    <button mat-raised-button (click)="newest()">Newest</button>
+                    <button mat-raised-button (click)="votes()">Votes</button>
+                    <button mat-raised-button (click)="unanswered()">Unanswered </button>
+                    <button mat-raised-button (click)="tag()">Tag </button>
+                </div>
+            </div>
+
         <div class="mat-elevation-z2">
             <table mat-table [dataSource]="dataSource" matSort matSortDisableClear>
                 <ng-container matColumnDef="title">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
                     <td mat-cell *matCellDef="let row"> {{row.title}} </td>
                 </ng-container>
+                <ng-container matColumnDef="body">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Body </th>
+                        <td mat-cell *matCellDef="let row"> {{row.body}} </td>
+                    </ng-container>
 
                 <ng-container matColumnDef="timestamp">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>

@@ -15,4 +15,10 @@ export class PostService{
           map(res => res.map(p => new Post(p)))
         );
       }
+
+      getQuestionsByNewest(){
+        return this.http.get<[Post]>(`${this.baseUrl}api/posts`).pipe(
+          map(res => res.map(p => new Post(p)).sort)
+        );
+      }
 }
