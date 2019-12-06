@@ -4,21 +4,31 @@ import { List } from "lodash";
 import { Vote } from "./vote";
 import { Comment } from "./comment";
 
-export class Post{
+export class Post {
     id: string;
     title: string;
     body: string;
     timestamp: string;
+    parentId: string;
+    parent: Post;
+    responses: Post[];
+    accepted: Post;
+    userId: string;
     user: User;
-    tags: List<Tag>;
-    votes: List<Vote>;
-    comments: List<Comment>;
+    tags: Tag[];
+    votes: Vote[];
+    comments: Comment[];
 
-    constructor(data: any){
+    constructor(data: any) {
         this.id = data.id;
         this.title = data.title;
         this.body = data.body;
         this.timestamp = data.timestamp;
+        this.parentId = data.parentId;
+        this.parent = data.parent;
+        this.responses = data.responses;
+        this.accepted = data.accepted;
+        this.userId = data.userId;
         this.user = data.user;
         this.tags = data.tags;
         this.votes = data.votes;

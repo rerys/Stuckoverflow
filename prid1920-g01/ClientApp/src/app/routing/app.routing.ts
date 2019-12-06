@@ -9,6 +9,7 @@ import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
 import { Role } from '../models/user';
 import { QuestionsListComponent } from '../components/questionsList/questionsList.component';
+import { QuestionComponent} from '../components/question/question.component';
 
 const appRoutes: Routes = [
 
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
     data: { roles: [Role.Admin] }
   },
   { path: 'posts', component: QuestionsListComponent },
+  { path: 'question/:id', component: QuestionComponent},
   { path: 'login',component: LoginComponent},
   { path: 'restricted', component: RestrictedComponent },
   { path: '**', component: UnknownComponent }

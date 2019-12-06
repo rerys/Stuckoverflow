@@ -15,8 +15,10 @@ namespace prid1920_g01.Models
         public string Body { get; set; }
         [Required(ErrorMessage = "Required Timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.Now;
+        public int UserId { get; set; }
         [Required(ErrorMessage = "Required User")]
         public virtual User User { get; set; }
+        public int PostId { get; set; }
         [Required(ErrorMessage = "Required Post")]
         public virtual Post Post { get; set; }
 

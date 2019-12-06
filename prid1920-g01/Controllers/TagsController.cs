@@ -79,7 +79,7 @@ namespace prid1920_g01.Controllers
             if (tag == null) return NotFound();
 
             tag.Name = tagDTO.Name;
-            tag.Posts = tagDTO.Posts.ToOBJ();
+            //tag.Posts = tagDTO.Posts.ToOBJ();
 
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty) return BadRequest(res);

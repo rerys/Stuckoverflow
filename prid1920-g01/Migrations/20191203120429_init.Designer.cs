@@ -9,8 +9,8 @@ using prid1920_g01.Models;
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    [Migration("20191120154745_models")]
-    partial class models
+    [Migration("20191203120429_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,23 +47,41 @@ namespace prid1920_g01.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Body");
+                    b.Property<int?>("AccpetedId");
 
-                    b.Property<int?>("TagId");
+                    b.Property<string>("Body")
+                        .IsRequired();
+
+                    b.Property<int>("ParentId");
 
                     b.Property<DateTime>("Timestamp");
 
                     b.Property<string>("Title");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("AccpetedId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("prid1920_g01.Models.PostTag", b =>
+                {
+                    b.Property<int>("PostId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTags");
                 });
 
             modelBuilder.Entity("prid1920_g01.Models.Tag", b =>
@@ -127,8 +145,6 @@ namespace prid1920_g01.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<DateTime>("Timestamp");
-
                     b.Property<int>("UpDown");
 
                     b.HasKey("PostId", "UserId");
@@ -143,23 +159,42 @@ namespace prid1920_g01.Migrations
                     b.HasOne("prid1920_g01.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("prid1920_g01.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("prid1920_g01.Models.Post", b =>
                 {
-                    b.HasOne("prid1920_g01.Models.Tag")
-                        .WithMany("Posts")
-                        .HasForeignKey("TagId");
+                    b.HasOne("prid1920_g01.Models.Post", "Accpeted")
+                        .WithMany()
+                        .HasForeignKey("AccpetedId");
+
+                    b.HasOne("prid1920_g01.Models.Post", "Parent")
+                        .WithMany("Responses")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("prid1920_g01.Models.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("prid1920_g01.Models.PostTag", b =>
+                {
+                    b.HasOne("prid1920_g01.Models.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid1920_g01.Models.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("prid1920_g01.Models.Vote", b =>
@@ -167,12 +202,12 @@ namespace prid1920_g01.Migrations
                     b.HasOne("prid1920_g01.Models.Post", "Post")
                         .WithMany("Votes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("prid1920_g01.Models.User", "User")
                         .WithMany("Votes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

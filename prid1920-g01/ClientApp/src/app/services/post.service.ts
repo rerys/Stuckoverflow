@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/post';
-import { map, flatMap, catchError } from 'rxjs/operators';
+import { map, flatMap, catchError, timestamp } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -10,15 +10,40 @@ export class PostService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
 
-  getQuestions() {
-    return this.http.get<[Post]>(`${this.baseUrl}api/posts`).pipe(
+getQuestions(filter: string) {
+    return this.http.get<[Post]>(`${this.baseUrl}api/posts/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-  getQuestionsByNewest() {
-    return this.http.get<[Post]>(`${this.baseUrl}api/posts`).pipe(
-      map(res => res.map(p => new Post(p)).sort)
+getQuestionsByNewest(filter: string) {
+    return this.http.get<[Post]>(`${this.baseUrl}api/posts/newest/${filter}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
+getQuestionsByVotes(filter: string) {
+    return this.http.get<[Post]>(`${this.baseUrl}api/posts/votes/${filter}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
+getQuestionsByUnanswered(filter: string) {
+    return this.http.get<[Post]>(`${this.baseUrl}api/posts/unanswered/${filter}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
+getQuestionsByTags(filter: string) {
+    return this.http.get<[Post]>(`${this.baseUrl}api/posts/tags/${filter}`).pipe(
+      map(res => res.map(p => new Post(p)))
+    );
+  }
+
+getQuestionById(id: number){
+    return this.http.get<Post>(`${this.baseUrl}api/posts/question/${id}`).pipe(
+      map(p => !p ? null : new Post(p)),
+      catchError(err => of(null))
     );
   }
 

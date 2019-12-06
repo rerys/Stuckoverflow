@@ -20,6 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
 import { QuestionsListComponent } from '../components/questionsList/questionsList.component';
 import { EditPostComponent } from '../components/edit-post/edit-post.component';
+import { QuestionComponent } from '../components/question/question.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
 
@@ -38,6 +40,7 @@ import { EditPostComponent } from '../components/edit-post/edit-post.component';
     EditUserComponent,
     EditPostComponent,
     QuestionsListComponent,
+    QuestionComponent
 
   ],
 
@@ -51,7 +54,8 @@ import { EditPostComponent } from '../components/edit-post/edit-post.component';
     ReactiveFormsModule,
     AppRoutes,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    MarkdownModule.forRoot(),
 
   ],
 

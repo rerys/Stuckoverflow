@@ -1,11 +1,7 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, PageEvent, MatSortHeader } from '@angular/material';
+import { Component } from '@angular/core';
 import * as _ from 'lodash';
-import { StateService } from 'src/app/services/state.service';
-import { MatTableState } from 'src/app/helpers/mattable.state';
 import { Post } from 'src/app/models/post';
 import { PostService } from 'src/app/services/post.service';
-import { EditPostComponent } from '../edit-post/edit-post.component';
 
 @Component({
     selector: 'app-questionsList',
@@ -14,81 +10,112 @@ import { EditPostComponent } from '../edit-post/edit-post.component';
 })
 
 
-export class QuestionsListComponent implements AfterViewInit {
+export class QuestionsListComponent {
 
-    displayedColumns: string[] = ['title', 'body', 'timestamp'];
-    dataSource: MatTableDataSource<Post> = new MatTableDataSource();
-    filter: string;
-    state: MatTableState;
-
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
-
-    constructor
-        (
-            private postService: PostService,
-            private stateService: StateService,
-            public dialog: MatDialog,
-            public snackBar: MatSnackBar
-
-        ) {
-        this.state = this.stateService.questionListState;
-    }
+    allActive: boolean;
+    newestActive: boolean;
+    votesActive: boolean;
+    unansweredActive: boolean;
+    tagActive: boolean;
+    posts: Post[] = [];
+    filter = "";
 
 
-    ngAfterViewInit(): void {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        this.dataSource.filterPredicate = (data: Post, filter: string) => {
-            const str = data.title + ' ' + data.body + ' ' + data.timestamp;
-            return str.toLowerCase().includes(filter);
-        };
-
-        this.state.bind(this.dataSource);
-        this.refresh();
-
-    }
-
-    refresh() {
-
-        this.postService.getQuestions().subscribe(q => {
-            this.dataSource.data = q;
-            this.state.restoreState(this.dataSource);
-            this.filter = this.state.filter;
-        });
+    constructor(private postService: PostService) {
+        this.allQuest();
     }
 
     filterChanged(filterValue: string) {
-
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        this.state.filter = this.dataSource.filter;
-        if (this.dataSource.paginator)
-            this.dataSource.paginator.firstPage();
+        this.filter = filterValue;
+        this.getQuestions();
 
     }
 
-    // newest(){
-    //     this.postService.getQuestionsByNewest().subscribe(q => {
-    //         this.dataSource.data = q;
-    //         this.state.restoreState(this.dataSource);
-    //         this.filter = this.state.filter;
-    //     });
-    // }
+    allQuest() {
+        this.unActive();
+        this.allActive = true;
+        this.getQuestions();
+    }
+
+    newest() {
+        this.unActive();
+        this.newestActive = true;
+        this.getQuestions();
+    }
+
+    votes() {
+        this.unActive();
+        this.votesActive = true;
+        this.getQuestions();
+    }
+
+    unanswered() {
+        this.unActive();
+        this.unansweredActive = true;
+        this.getQuestions();
+    }
+
+    tag() {
+        this.unActive();
+        this.tagActive = true;
+        this.getQuestions();
+    }
+
+    private getQuestions() {
+        if (this.allActive) {
+            this.postService.getQuestions(this.filter).subscribe(q => {
+                this.posts = q;
+            });
+
+        } else if (this.newestActive) {
+            this.postService.getQuestionsByNewest(this.filter).subscribe(q => {
+                this.posts = q;
+            });
+
+        } else if (this.votesActive) {
+            this.postService.getQuestionsByVotes(this.filter).subscribe(q => {
+                this.posts = q;
+            });
+
+        } else if (this.unanswered) {
+            this.postService.getQuestionsByUnanswered(this.filter).subscribe(q => {
+                this.posts = q;
+            });
+
+        } else if (this.tagActive) {
+            this.postService.getQuestionsByTags(this.filter).subscribe(q => {
+                this.posts = q;
+            });
+
+        }
+        console.log(this.posts);
+    }
+
+
+
 
     create() {
-        const post = new Post({});
-        const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true, add: false } });
-        dlg.beforeClose().subscribe(res => {
-            if (res) {
-                this.dataSource.data = [...this.dataSource.data, new Post(res)];
-                this.postService.add(res).subscribe(res => {
-                    if (!res) {
-                        this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
-                        this.refresh();
-                    }
-                });
-            }
-        });
+        // const post = new Post({});
+        // const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true, add: false } });
+        // dlg.beforeClose().subscribe(res => {
+        //     if (res) {
+        //         this.dataSource.data = [...this.dataSource.data, new Post(res)];
+        //         this.postService.add(res).subscribe(res => {
+        //             if (!res) {
+        //                 this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+        //                 this.refresh();
+        //             }
+        //         });
+        //     }
+        // });
+    }
+
+    private unActive() {
+        this.allActive = false;
+        this.newestActive = false;
+        this.votesActive = false;
+        this.unansweredActive = false;
+        this.tagActive = false;
+
     }
 }

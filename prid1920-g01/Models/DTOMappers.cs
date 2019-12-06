@@ -37,6 +37,21 @@ namespace prid1920_g01.Models
 
         }
 
+        public static UserDTO ToSimpleDTO(this User user)
+        {
+            return new UserDTO
+            {
+                Id = user.Id,
+                Pseudo = user.Pseudo,
+                Reputation = user.Reputation
+            };
+        }
+        public static List<UserDTO> ToSimpleDTO(this IEnumerable<User> users)
+        {
+            return users.Select(u => u.ToSimpleDTO()).ToList();
+        }
+
+
         //convertisseur d'une liste User vers une liste UserDTO
         public static List<UserDTO> ToDTO(this IEnumerable<User> users)
         {
@@ -63,7 +78,8 @@ namespace prid1920_g01.Models
         }
 
         //convertisseur d'une liste UserDTO vers une liste User
-        public static List<User> ToOBJ(this IEnumerable<UserDTO> users){
+        public static List<User> ToOBJ(this IEnumerable<UserDTO> users)
+        {
             return users.Select(u => u.ToOBJ()).ToList();
         }
 
@@ -84,9 +100,41 @@ namespace prid1920_g01.Models
                 Title = post.Title,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-               // User = post.User.ToDTO(),
-                Tags = post.Tags.ToDTO(),
-                Votes = post.Votes.ToDTO(),
+                User = post.User.ToSimpleDTO(),
+                Responses = post.Responses.Select(r => new PostDTO
+                {
+                    Id = r.Id,
+                    Body = r.Body,
+                    Timestamp = r.Timestamp,
+                    User = r.User.ToSimpleDTO(),
+                    Comments = r.Comments.ToDTO()
+
+
+                }).ToList(),
+
+                // Accepted = new PostDTO{
+                //     Id = post.Accpeted.Id
+                // },
+
+                Tags = post.Tags.Select(t => new TagDTO
+                {
+                    Id = t.Id,
+                    Name = t.Name
+
+                }).ToList(),
+                Votes = post.Votes.Select(r => new VoteDTO
+                {
+                    UpDown = r.UpDown
+                }).ToList(),
+
+                // Comments = post.Comments.Select(t => new CommentDTO
+                // {
+                //     Id = t.Id,
+                //     Body = t.Body
+
+                // }).ToList()
+
+
                 Comments = post.Comments.ToDTO()
 
             };
@@ -109,7 +157,7 @@ namespace prid1920_g01.Models
                 Body = p.Body,
                 Timestamp = p.Timestamp,
                 User = p.User.ToOBJ(),
-                Tags = p.Tags.ToOBJ(),
+                //Tags = p.Tags.ToOBJ(),
                 Votes = p.Votes.ToOBJ(),
                 Comments = p.Comments.ToOBJ()
 
@@ -139,8 +187,8 @@ namespace prid1920_g01.Models
                 Id = comment.Id,
                 Body = comment.Body,
                 Timestamp = comment.Timestamp,
-                User = comment.User.ToDTO(),
-                Post = comment.Post.ToDTO()
+                User = comment.User.ToSimpleDTO(),
+                //Post = comment.Post.ToDTO()
 
             };
 
@@ -203,7 +251,7 @@ namespace prid1920_g01.Models
             {
                 Id = t.Id,
                 Name = t.Name,
-                Posts = t.Posts.ToOBJ()
+                // Posts = t.Posts.ToOBJ()
             };
         }
 
