@@ -7,16 +7,23 @@
 
 <div class="row">
     <div class="col-sm-12">
+        <button type="button"  class="btn btn-secondary" (click)="onCreate()" >Ask
+            question</button>
 
         <div class="container controle">
             <div style="float: left">
                 <div class="btn-group btn-group-toggle d-inline" data-toggle="buttons" role="group"
                     aria-label="Basic example">
-                    <button type="button"  [disabled]="allActive" name="btn" class="btn btn-secondary" (click)="allQuest()">All questions</button>
-                    <button type="button"  [disabled]="newestActive" name="btn" class="btn btn-secondary" (click)="newest()">Newest</button>
-                    <button type="button"  [disabled]="votesActive" name="btn" class="btn btn-secondary" (click)="votes()">Votes</button>
-                    <button type="button"  [disabled]="unansweredActive" name="btn" class="btn btn-secondary" (click)="unanswered()">Unanswered</button>
-                    <button type="button"  [disabled]="tagActive" name="btn" class="btn btn-secondary" (click)="tag()" >Tag</button>
+                    <button type="button" [disabled]="allActive" name="btn" class="btn btn-secondary"
+                        (click)="allQuest()">All questions</button>
+                    <button type="button" [disabled]="newestActive" name="btn" class="btn btn-secondary"
+                        (click)="newest()">Newest</button>
+                    <button type="button" [disabled]="votesActive" name="btn" class="btn btn-secondary"
+                        (click)="votes()">Votes</button>
+                    <button type="button" [disabled]="unansweredActive" name="btn" class="btn btn-secondary"
+                        (click)="unanswered()">Unanswered</button>
+                    <button type="button" [disabled]="tagActive" name="btn" class="btn btn-secondary"
+                        (click)="tag()">Tag</button>
                 </div>
             </div>
             <div style="float: right">
@@ -42,15 +49,14 @@
                             <div class="viewcount">votes</div>
                         </div>
                     </div>
-                    <div class="status unanswered"
-                    [ngClass]="{
+                    <div class="status unanswered" [ngClass]="{
                         'answer': p.responses.length > 0 && p.accepted == null,
                         'accepted': p.accepted != null
                       }">
                         <strong>{{ p.responses.length }}</strong>
                         answers
                     </div>
-                </div> 
+                </div>
             </div>
 
             <div class="summary">
@@ -66,11 +72,11 @@
 
                 <div class="started fr">
                     <div class="user-info user-hover">
-                            <div class="user-details">
-                                    <a href="#">{{p.user.pseudo}}</a>
-                                </div>
+                        <div class="user-details">
+                            <a href="#">{{p.user.pseudo}}</a>
+                        </div>
 
-                                <img src="user.png" alt="" class="bar-sm" width="32" height="32"> 
+                        <img src="user.png" alt="" class="bar-sm" width="32" height="32">
 
                         <div class="added text-muted font-italic">
                             <a href="#" class="text-reset">added <span title="2019-11-30 18:15:09Z"

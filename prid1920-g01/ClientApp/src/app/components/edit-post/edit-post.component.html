@@ -1,34 +1,48 @@
-<form id="frm" class="form" [formGroup]="frm" novalidate>
+<form #f="ngForm">
 
+    <mat-tab-group mat-stretch-tabs dynamicHeight>
+        <mat-tab label="Edit">
 
-    <h1 class="header">{{(!isNew ? 'Edit existing' : !add ? 'Add a new' : 'Create a new Question') + ' question'}}</h1>
+            <div>
+                <div class="input-group">
+                    <span class="input-group-addon bg-secondary text-white" id="sizing-addon1">
+                        <h5>Title</h5>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Enter title" aria-describedby="sizing-addon1"
+                        [(ngModel)]="post.title" [required]="requiredTitle" [readonly]="!requiredTitle" ndModel name="title">
+                </div>
 
-    <div class="form">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="card-title float-sm-left">Content</h5>
+                    </div>
+                    <div class="card-body">
+                        <div ace-editor required [(text)]="post.body" [mode]="'markdown'" [theme]="'textmate'"
+                            [options]="options" style="min-height: 100px; width:100%; overflow: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Preview">
+            <div class="card mb-5">
+                <div class="card-header bg-secondary main-bg-lighter-color">
+                    <div class="float-sm-left">
+                        <a class="perm-link">
+                            <h2 class="card-title">{{post?.title}}</h2>
+                        </a>
+                        <h5>{{post?.timestamp | date}}</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <markdown [data]="post?.body"></markdown>
+                </div>
+            </div>
+        </mat-tab>
 
-        <!-- Title -->
-        <mat-form-field>
-            <input matInput placeholder="Title" [formControl]="ctlTitle" required [readonly]="!isNew">
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is
-                {{ctlTitle.errors['minlength'].requiredLength}}</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pattern')">Forbiddent value</mat-error>
-        </mat-form-field>
-
-        <!-- Body -->
-        <mat-form-field>
-            <input matInput [placeholder]="'Body ' + (isNew ? '' : ' (leave blank if no change)')"
-                (change)="passwordChanged()" [formControl]="ctlBody" type="password" [required]="isNew"
-                autocomplete="new-password">
-            <mat-error class="field-error" *ngIf="ctlBody.hasError('required')">Required</mat-error>
-            <mat-error class="field-error" *ngIf="ctlBody.hasError('minlength')">Minimum length is
-                {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
-        </mat-form-field>
-        <!-- Boutons d'action -->
-        <div class="footer">
-            <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
-                (click)="update()">{{!isNew ? 'Update' : !signup ? 'Add' : 'signIn'}}</button>
-            <button type="reset" mat-button (click)="cancel()">Cancel</button>
-        </div>
-    </div>
-
-</form>
+    </mat-tab-group>
+<div class="butt row justify-content-center">
+    <button type="button" class="btn btn-success" [disabled]="!canActivate()" (click)="save()">Save</button>
+    <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
+</div>
+</form> 

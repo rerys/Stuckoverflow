@@ -25,12 +25,11 @@ export class AuthenticationService {
   }
 
   login(pseudo: string, password: string) {
-
     return this.http.post<User>(`${this.baseUrl}api/users/authenticate`, { pseudo, password })
 
       .pipe(map(user => {
 
-        user = new User(user);
+        user = new User(user); 
 
         // login successful if there's a jwt token in the response
 

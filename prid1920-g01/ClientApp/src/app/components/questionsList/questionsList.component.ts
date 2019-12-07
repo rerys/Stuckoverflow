@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import * as _ from 'lodash';
 import { Post } from 'src/app/models/post';
 import { PostService } from 'src/app/services/post.service';
+import { EditPostService } from 'src/app/services/edit-post.service';
+
 
 @Component({
     selector: 'app-questionsList',
@@ -21,7 +22,7 @@ export class QuestionsListComponent {
     filter = "";
 
 
-    constructor(private postService: PostService) {
+    constructor(private postService: PostService, public editPostService: EditPostService ) {
         this.allQuest();
     }
 
@@ -90,25 +91,17 @@ export class QuestionsListComponent {
         }
         console.log(this.posts);
     }
+    onCreate() {
 
+        this.editPostService.create().subscribe(q =>{
 
+        })
 
-
-    create() {
-        // const post = new Post({});
-        // const dlg = this.dialog.open(EditPostComponent, { data: { post, isNew: true, add: false } });
-        // dlg.beforeClose().subscribe(res => {
-        //     if (res) {
-        //         this.dataSource.data = [...this.dataSource.data, new Post(res)];
-        //         this.postService.add(res).subscribe(res => {
-        //             if (!res) {
-        //                 this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
-        //                 this.refresh();
-        //             }
-        //         });
-        //     }
-        // });
     }
+
+
+
+
 
     private unActive() {
         this.allActive = false;

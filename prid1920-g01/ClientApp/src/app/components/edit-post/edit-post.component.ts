@@ -1,46 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import * as _ from 'lodash';
-import { Post } from 'src/app/models/post';
-import { EditPostBase } from 'src/app/helpers/editPostbase';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { PostService } from 'src/app/services/post.service';
+import { Post } from 'src/app/models/post';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { EditPostService } from 'src/app/services/edit-post.service';
 
 
 @Component({
-    selector: 'app-edit-user-mat',
-    templateUrl: './edit-post.component.html',
-    styleUrls: ['./edit-post.component.css']
+  selector: 'edit-post',
+  templateUrl: './edit-post.component.html',
+  styleUrls: ['./edit-post.component.css']
 })
+export class EditPostComponent {
 
-export class EditPostComponent extends EditPostBase {
+  @Input() post = this.data.post;
+  new: boolean = true;
+  options: any = {
+    autoScrollEditorIntoView: true,
+    maxLines: 28,
+    showLineNumbers: true
+  };
 
+  requiredTitle: boolean;
 
-    public isNew: boolean;
-    public add: boolean;
+  constructor(public dialogRef: MatDialogRef<EditPostComponent>,
 
-    constructor(public dialogRef: MatDialogRef<EditPostComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
+    private postService: PostService,
+    private route: ActivatedRoute,
+    //public editPostService: EditPostService
 
-        @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; add: boolean; },
-        fb: FormBuilder,
-        postService: PostService
+  ) {
 
-    ) {
+    this.requiredTitle = this.titleIsRequired();
+  }
 
-        super(data, postService, fb);
-        this.isNew = data.isNew;
-        this.add = data.add;
+  private titleIsRequired() {
+    return this.data.isNew || this.data.post.title != null
+  }
+  onCreate(){
+    console.log("Create new question");
+  }
 
+  canActivate() {
+    let act = true;
+    if (this.requiredTitle) { if (this.isEmpty(this.data.post.title)) act = false; }
+    if (this.isEmpty(this.data.post.body)) act = false;
+    return act;
+  }
 
-    }
+  onNoClick(): void { this.dialogRef.close(); }
 
+  save() { this.dialogRef.close(this.data); }
 
-    onNoClick(): void { this.dialogRef.close(); }
+  cancel() { this.dialogRef.close(); }
 
-    update() { this.dialogRef.close(this.frm.value); }
-
-    cancel() { this.dialogRef.close(); }
+  private isEmpty(value: string): boolean {
+    if (value == null || value == undefined || value.length == 0) return true;
+    return false;
+  }
 
 
 }

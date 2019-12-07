@@ -1,79 +1,41 @@
-.form .form {
-
-    margin-top: 15px;
-
+.butt{
+  margin-top: 15px;
 }
-
-* {
-
-    box-sizing: border-box;
-
-}
-
-.phone-container {
-
-    margin-top: 15px;
-
-    display: inline-grid;
-
-    grid-column-gap: 5px;
-
-    grid-template-columns: 1fr 1fr auto;
-
-    align-items: center;
-
-}
-
-.add {
-
-    height: 40px;
-
-}
-
-.delete {
-
-    display: grid;
-
-    justify-items: center;
-
-}
-
-.picture-container {
-
-    display: grid;
-
-    justify-items: center;
-
-    align-items: center;
-
-    grid-template-columns: auto;
-
-    grid-row-gap: 10px;
-
-    margin: 10px;
-
-}
-
-.footer {
-
-    display: grid;
-
-    justify-items: stretch;
-
-    align-items: center;
-
-    grid-template-columns: auto auto;
-
-    margin-top: 30px;
-
-}
-form {
-
-    width: 30%;
-
-    display: grid;
-
-    grid-row-gap: 10px;
-
-}
-
+.btn {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .btn-success {
+    font-family: Raleway-SemiBold;
+    font-size: 13px;
+    color: rgba(103, 192, 103, 0.75);
+    letter-spacing: 1px;
+    line-height: 15px;
+    border: 2px solid rgba(103, 192, 103, 0.75);
+    border-radius: 40px;
+    background: transparent;
+    transition: all 0.3s ease 0s;
+  }
+  
+  .btn-success:hover {
+    color: #FFF;
+    background: rgb(103, 192, 103, 0.75);
+    border: 2px solid rgb(103, 192, 103, 0.75);
+  }  
+  .btn-danger {
+    font-family: Raleway-SemiBold;
+    font-size: 13px;
+    color: rgba(217, 83, 78, 0.75);
+    letter-spacing: 1px;
+    line-height: 15px;
+    border: 2px solid rgba(217, 83, 78, 0.75);
+    border-radius: 40px;
+    background: transparent;
+    transition: all 0.3s ease 0s;
+  }
+  
+  .btn-danger:hover {
+    color: #FFF;
+    background: rgba(217, 83, 78, 0.75);
+    border: 2px solid rgba(217, 83, 78, 0.75);
+  }

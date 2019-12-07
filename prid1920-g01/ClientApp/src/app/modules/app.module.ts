@@ -22,6 +22,7 @@ import { QuestionsListComponent } from '../components/questionsList/questionsLis
 import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { QuestionComponent } from '../components/question/question.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
 
@@ -55,6 +56,7 @@ import { MarkdownModule } from 'ngx-markdown';
     AppRoutes,
     BrowserAnimationsModule,
     SharedModule,
+    AceEditorModule,
     MarkdownModule.forRoot(),
 
   ],
