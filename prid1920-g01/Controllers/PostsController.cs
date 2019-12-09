@@ -90,7 +90,29 @@ namespace prid1920_g01.Controllers
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data)
         {
 
+            var user = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             var newPost = data.ToOBJ();
+            newPost.UserId = user.Id;
+            _context.Posts.Add(newPost);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return CreatedAtAction(nameof(GetAll), newPost.ToDTO());
+        }
+
+        [HttpPost("{idParent}")]
+        public async Task<ActionResult<PostDTO>> PostReply([FromRoute]int idParent, [FromBody]PostDTO data)
+        {
+
+            var user = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
+            var post = await _context.Posts.Where(p => p.Id == idParent && p.ParentId == null).SingleOrDefaultAsync();
+            if(user == null || post == null) return BadRequest();
+
+            var newPost = data.ToOBJ(); 
+            newPost.UserId = user.Id;
+            //newPost.User = user;
+            newPost.ParentId = idParent;
+            //newPost.Parent = post;
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)

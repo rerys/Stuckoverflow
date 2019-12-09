@@ -21,14 +21,37 @@ export class EditPostService implements OnDestroy {
         const dlg = this.dialog.open(EditPostComponent, {
             data: { post, isNew: true }, width: '80%',
             height: '90%'
-        });
+        }); 
 
         dlg.beforeClose().subscribe(res => {
 
             if (res) {
                 return this.postService.add(res).subscribe(res => {
                     if (!res) {
-                        this.snackBar.open(`There was an error at the server. The member has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+                        this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+                    }
+                    return of(true);
+                });
+            }
+        });
+        return of(false);
+    }
+
+
+    addReply(idParent: number): Observable<boolean> {
+        const post = new Post({});
+
+        const dlg = this.dialog.open(EditPostComponent, {
+            data: { post, isNew: false }, width: '80%',
+            height: '90%'
+        }); 
+
+        dlg.beforeClose().subscribe(res => {
+
+            if (res) {
+                return this.postService.addReply(idParent, res).subscribe(res => {
+                    if (!res) {
+                        this.snackBar.open(`There was an error at the server. The post has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
                     }
                 });
             }

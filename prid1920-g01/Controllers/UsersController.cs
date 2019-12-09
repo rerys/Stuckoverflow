@@ -182,7 +182,7 @@ namespace prid1920_g01.Controllers
                 return BadRequest(new ValidationErrors().Add("user not found", "Pseudo"));
             if (user.Token == null)
                 return BadRequest(new ValidationErrors().Add("Incorrect password", "Password"));
-            return Ok(user);
+            return Ok(user.AuthenticateDTO());
         }
         private async Task<User> Authenticate(string pseudo, string password)
         {

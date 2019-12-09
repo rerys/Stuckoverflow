@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Post } from 'src/app/models/post';
 import { PostService } from 'src/app/services/post.service';
 import { EditPostService } from 'src/app/services/edit-post.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 
 @Component({
@@ -22,7 +23,9 @@ export class QuestionsListComponent {
     filter = "";
 
 
-    constructor(private postService: PostService, public editPostService: EditPostService ) {
+    constructor(private postService: PostService,
+        public editPostService: EditPostService,
+        private authenticationService: AuthenticationService) {
         this.allQuest();
     }
 
@@ -89,18 +92,14 @@ export class QuestionsListComponent {
             });
 
         }
-        console.log(this.posts);
     }
     onCreate() {
-
-        this.editPostService.create().subscribe(q =>{
-
-        })
-
+        this.editPostService.create().subscribe(res => {
+            if(res){
+                this.getQuestions();
+            }
+        });
     }
-
-
-
 
 
     private unActive() {
@@ -111,4 +110,10 @@ export class QuestionsListComponent {
         this.tagActive = false;
 
     }
+
+    get currentUser() { return this.authenticationService.currentUser; }
+
+
+
+
 }

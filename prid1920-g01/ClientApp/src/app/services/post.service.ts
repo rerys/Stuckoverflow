@@ -80,9 +80,9 @@ getQuestionById(id: number){
     );
   }
 
-  public addNewPost(p: Post): Observable<boolean> {
+  public addReply(idParent: number, p: Post): Observable<boolean> {
 
-    return this.http.post<Post>(`${this.baseUrl}api/posts/newPost`, p).pipe(
+    return this.http.post<Post>(`${this.baseUrl}api/posts/${idParent}`, p).pipe( 
       map(res => true),
       catchError(err => {
         console.error(err);

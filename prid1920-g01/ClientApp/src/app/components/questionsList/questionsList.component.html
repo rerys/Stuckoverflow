@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <button type="button"  class="btn btn-secondary" (click)="onCreate()" >Ask
+        <button type="button"  *ngIf="currentUser" class="btn btn-secondary" (click)="onCreate()" >Ask
             question</button>
 
         <div class="container controle">

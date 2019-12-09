@@ -44,10 +44,10 @@ namespace prid1920_g01.Models
             {
                 yield return new ValidationResult("Mustn't have a title", new[] { nameof(Title) });
             }
-            if (Parent != null && Responses != null)
-            {
-                yield return new ValidationResult("An answer can not have an answer", new[] { nameof(Responses) });
-            }
+            // if (Parent != null && Responses != null)
+            // {
+            //     yield return new ValidationResult("An answer can not have an answer", new[] { nameof(Responses) });
+            // }
             if (Accpeted != null && Parent == null)
             {
                 yield return new ValidationResult("A question cannot be accepted", new[] { nameof(Accpeted) });

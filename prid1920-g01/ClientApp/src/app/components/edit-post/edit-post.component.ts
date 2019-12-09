@@ -39,9 +39,7 @@ export class EditPostComponent {
   private titleIsRequired() {
     return this.data.isNew || this.data.post.title != null
   }
-  onCreate(){
-    console.log("Create new question");
-  }
+
 
   canActivate() {
     let act = true;
@@ -52,7 +50,7 @@ export class EditPostComponent {
 
   onNoClick(): void { this.dialogRef.close(); }
 
-  save() { this.dialogRef.close(this.data); }
+  save() { this.dialogRef.close(this.data.post); }
 
   cancel() { this.dialogRef.close(); }
 

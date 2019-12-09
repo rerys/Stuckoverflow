@@ -10,6 +10,28 @@ namespace prid1920_g01.Models
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                                          //
+        //                                    DTOMapper Authenticate  User                                          //
+        //                                                                                                          //
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static AuthenticateUserDTO AuthenticateDTO(this User user){
+            return new AuthenticateUserDTO{
+                Id = user.Id,
+                Pseudo = user.Pseudo,
+                Email = user.Email,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                BirthDate = user.BirthDate,
+                Reputation = user.Reputation,
+                Role = user.Role,
+                Token = user.Token
+            };
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                                          //
         //                                             DTOMapper User                                               //
         //                                                                                                          //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,11 +177,12 @@ namespace prid1920_g01.Models
                 Id = p.Id,
                 Title = p.Title,
                 Body = p.Body,
-                Timestamp = p.Timestamp,
-                User = p.User.ToOBJ(),
+                UserId = p.UserId,
+                //Timestamp = p.Timestamp,
+                //User = p.User.ToOBJ(),
                 //Tags = p.Tags.ToOBJ(),
-                Votes = p.Votes.ToOBJ(),
-                Comments = p.Comments.ToOBJ()
+                //Votes = p.Votes.ToOBJ(),
+                //Comments = p.Comments.ToOBJ()
 
             };
         }
@@ -274,7 +297,7 @@ namespace prid1920_g01.Models
             return new VoteDTO
             {
                 UpDown = vote.UpDown,
-                User = vote.User.ToDTO(),
+                User = vote.User.ToSimpleDTO(),
                 Post = vote.Post.ToDTO()
 
             };
