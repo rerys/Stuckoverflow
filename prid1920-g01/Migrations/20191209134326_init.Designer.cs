@@ -9,7 +9,7 @@ using prid1920_g01.Models;
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    [Migration("20191203120429_init")]
+    [Migration("20191209134326_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace prid1920_g01.Migrations
                     b.Property<string>("Body")
                         .IsRequired();
 
-                    b.Property<int>("ParentId");
+                    b.Property<int?>("ParentId");
 
                     b.Property<DateTime>("Timestamp");
 

@@ -50,7 +50,7 @@ namespace prid1920_g01.Migrations
                     b.Property<string>("Body")
                         .IsRequired();
 
-                    b.Property<int>("ParentId");
+                    b.Property<int?>("ParentId");
 
                     b.Property<DateTime>("Timestamp");
 

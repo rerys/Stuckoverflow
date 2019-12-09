@@ -50,7 +50,7 @@ namespace prid1920_g01.Migrations
                     Title = table.Column<string>(nullable: true),
                     Body = table.Column<string>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
-                    ParentId = table.Column<int>(nullable: false),
+                    ParentId = table.Column<int>(nullable: true),
                     AccpetedId = table.Column<int>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },

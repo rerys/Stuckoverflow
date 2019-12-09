@@ -17,7 +17,7 @@ namespace prid1920_g01.Models
         public string Body { get; set; }
         [Required(ErrorMessage = "Must have a timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.Now;
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public virtual Post Parent { get; set; }
         public virtual IList<Post> Responses { get; set; } = new List<Post>();
         public virtual Post Accpeted { get; set; }
