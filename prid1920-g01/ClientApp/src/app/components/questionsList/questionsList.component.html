@@ -63,12 +63,7 @@
                 <h3><a routerLink="/question/{{p.id}}" class="question-hyperlink">{{ p.title }}</a></h3>
                 <div class="excerpt">{{ p.body.substr(0, 300) }}</div>
 
-
-
-                <div class="tags" *ngIf="p.tags != null">
-                    <a *ngFor="let t of p.tags" href="#" class="post-tag" rel="tag">{{ t.name }}</a>
-
-                </div>
+                <tags [data]="p.tags"></tags>
 
                 <div class="started fr">
                     <div class="user-info user-hover">

@@ -23,6 +23,9 @@ import { EditPostComponent } from '../components/edit-post/edit-post.component';
 import { QuestionComponent } from '../components/question/question.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { AceEditorModule } from 'ng2-ace-editor';
+import { CommentsComponents} from '../components/views/view-comments/view-comments.component';
+import { PostComponent } from '../components/views/view-post/view-post.component';
+import { TagsComponent } from '../components/views/view-tags/view-tags.component'
 
 @NgModule({
 
@@ -41,7 +44,10 @@ import { AceEditorModule } from 'ng2-ace-editor';
     EditUserComponent,
     EditPostComponent,
     QuestionsListComponent,
-    QuestionComponent
+    QuestionComponent,
+    CommentsComponents,
+    PostComponent,
+    TagsComponent
 
   ],
 

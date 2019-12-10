@@ -106,9 +106,9 @@ namespace prid1920_g01.Controllers
 
             var user = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             var post = await _context.Posts.Where(p => p.Id == idParent && p.ParentId == null).SingleOrDefaultAsync();
-            if(user == null || post == null) return BadRequest();
+            if (user == null || post == null) return BadRequest();
 
-            var newPost = data.ToOBJ(); 
+            var newPost = data.ToOBJ();
             newPost.UserId = user.Id;
             //newPost.User = user;
             newPost.ParentId = idParent;
@@ -125,7 +125,7 @@ namespace prid1920_g01.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(int id, PostDTO postDTO)
         {
-            var connectedUser = await _context.Users.FindAsync(User.Identity.Name);
+            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             if (postDTO.User.Id != connectedUser.Id) { return BadRequest(); }
             if (id != postDTO.Id) { return BadRequest(); }
             var post = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
@@ -133,22 +133,19 @@ namespace prid1920_g01.Controllers
                 return NotFound();
             post.Title = postDTO.Title;
             post.Body = postDTO.Body;
-            post.Timestamp = DateTime.Now;
-            post.User = postDTO.User.ToOBJ();
-            // post.Tags = postDTO.Tags.ToOBJ();
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return NoContent();
+            return NoContent(); 
         }
 
 
-        //Delete a post
+        //Delete a post   
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
-            var connectedUser = await _context.Users.FindAsync(User.Identity.Name);
+            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             if (post.User.Id != connectedUser.Id) { return BadRequest(); }
             if (post == null)
                 return NotFound();

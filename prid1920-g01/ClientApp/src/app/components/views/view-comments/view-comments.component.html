@@ -1,0 +1,16 @@
+<ul class="comments list-group list-group-flush">
+    <li class="list-group-item font-weight">Comments:
+        <button type="button" *ngIf="currentUser" title="Add comment"
+            class="material-icons  float-right btn-sm">&#xE03B;</button>
+    </li>
+
+    <li *ngFor="let r of data" class="list-group-item font-weight-light">
+        <markdown data="{{r.body}}"></markdown>
+        <p class="blockquote-footer">{{r.user?.pseudo}} {{r.timestamp  | date:'short'}}</p>
+
+        <div *ngIf="currentUser && !activateAction(r.user?.id)" class="align-middle float-left" style="margin-top: 15px"> 
+            <button mat-icon-button title="Edit" aria-label="Edit"> <mat-icon >edit</mat-icon> </button>
+            <button mat-icon-button title="Delete"><mat-icon >delete</mat-icon></button>     
+        </div>
+    </li>
+</ul>

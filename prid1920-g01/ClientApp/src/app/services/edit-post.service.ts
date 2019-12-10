@@ -68,7 +68,7 @@ export class EditPostService implements OnDestroy {
 
         });
         return of(false);
-    }
+    } 
 
 
     edit(post: Post): Observable<boolean> {
@@ -77,7 +77,7 @@ export class EditPostService implements OnDestroy {
             data: { post, isNew: false }, width: '80%',
             height: '90%'
         });
-
+ 
         dlg.beforeClose().subscribe(res => {
             if (res) {
                 return this.postService.update(res).subscribe(res => {

@@ -1,70 +1,9 @@
 <div *ngIf="question != []">
-    <div class="card w-80">
-        <div class="card-header">
-            <h2>{{question.title}}</h2>
-            <div class="row card-text">
-                <div class="text-right">
-                    <small class="text-muted">Posted: {{question.timestamp | date:'short'}}</small>
-                </div>
-                <div class="ml-auto">
-                    <p>{{question.user?.pseudo}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="card-text">
-            <div class="quest">
-                <markdown data="{{question.body}}"></markdown>
-                <div class="tags" *ngIf="question.tags != null">
-                    <a *ngFor="let t of question.tags" class="post-tag" rel="tag">{{ t.name }}</a>
-                </div>
-            </div>
-            <div style="clear: both"></div>
-            <button type="button" *ngIf="currentUser" style="margin-top: 20px" class="btn float-right btn-primary btn-lg " (click)="onReply()">Reply to this
-                question</button>
 
-            <ul class="comments list-group list-group-flush" *ngIf="question.comments != []">
-                <li class="list-group-item font-weight">Comments:
-                    <button type="button" *ngIf="currentUser" class="btn btn-secondary  float-right btn-sm">Add comment</button>
-                </li>
+    <post [data]="question" [id]="id"></post>
 
-                <li *ngFor="let r of question.comments" class="list-group-item font-weight-light">
-                    <markdown data="{{r.body}}"></markdown>
-                    <p class="blockquote-footer">{{r.user?.pseudo}} {{r.timestamp  | date:'short'}}</p>
-                </li>
-            </ul>
-        </div>
-
+    <div class="post" *ngFor="let r of question.responses">
+        <post [data]="r" [id]="id"></post>
     </div>
-
-    <!-- responses -->
-    <div class="rep card w-80" *ngFor="let r of question.responses">
-
-        <div class="card-header">
-            <div class="row card-text"> 
-                <div class="text-right">
-                    <small class="text-muted">Posted: {{r.timestamp | date:'short'}}</small>
-                </div>
-                <div class="ml-auto">
-                    <p>{{r.user?.pseudo}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="card-text">
-            <div class="quest">
-                <markdown data="{{r.body}}"></markdown>
-            </div>
-
-            <ul class="comments list-group list-group-flush" *ngIf="r.comments != null">
-                <li class="list-group-item font-weight">Comments:
-                    <button type="button" *ngIf="currentUser" class="btn btn-secondary  float-right btn-sm">Add comment</button>
-                </li>
-                <li *ngFor="let c of r.comments" class="list-group-item font-weight-light">
-                    <markdown data="{{c.body}}"></markdown>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-
 
 </div>
