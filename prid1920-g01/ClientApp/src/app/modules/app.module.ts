@@ -27,6 +27,9 @@ import { CommentsComponents } from '../components/views/view-comments/view-comme
 import { PostComponent } from '../components/views/view-post/view-post.component';
 import { TagsComponent } from '../components/views/view-tags/view-tags.component';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component'
+import { TagsListComponent } from '../components/tagsList/tagsList.component';
+import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
+
 
 @NgModule({
 
@@ -49,14 +52,18 @@ import { EditCommentComponent } from '../components/edit-comment/edit-comment.co
     CommentsComponents,
     PostComponent,
     TagsComponent,
-    EditCommentComponent
+    EditCommentComponent,
+    TagsListComponent,
+    EditTagComponent
 
   ],
 
   entryComponents: [
     EditUserComponent, 
     EditPostComponent, 
-    EditCommentComponent],
+    EditCommentComponent,
+    EditTagComponent
+  ],
 
   imports: [
 

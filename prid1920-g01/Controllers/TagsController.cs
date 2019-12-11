@@ -28,7 +28,7 @@ namespace prid1920_g01.Controllers
 
         //méthode GET
         //retourne une liste de tous les Tags
-        [Authorized(Role.Admin)]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetAll()
         {
@@ -39,7 +39,7 @@ namespace prid1920_g01.Controllers
         //méthode GET
         //retourne un Tag par son nom 
         //paramètre string "name" 
-        [Authorized(Role.Admin)]
+        [AllowAnonymous]
         [HttpGet("{name}")]
         public async Task<ActionResult<TagDTO>> GetOne(string name)
         {

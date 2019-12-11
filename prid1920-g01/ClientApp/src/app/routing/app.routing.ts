@@ -10,6 +10,7 @@ import { AuthGuard } from '../services/auth.guard';
 import { Role } from '../models/user';
 import { QuestionsListComponent } from '../components/questionsList/questionsList.component';
 import { QuestionComponent} from '../components/question/question.component';
+import { TagsListComponent } from '../components/tagsList/tagsList.component';
 
 const appRoutes: Routes = [
 
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
   },
   { path: 'posts', component: QuestionsListComponent },
   { path: 'question/:id', component: QuestionComponent},
+  { path: 'tags', component: TagsListComponent},
   { path: 'login',component: LoginComponent},
   { path: 'restricted', component: RestrictedComponent },
   { path: '**', component: UnknownComponent }

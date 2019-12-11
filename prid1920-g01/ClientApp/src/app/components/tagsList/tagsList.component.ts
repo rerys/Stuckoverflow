@@ -1,21 +1,25 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, PageEvent, MatSortHeader } from '@angular/material';
 import * as _ from 'lodash';
-import { User } from '../../models/user';
-import { UserService } from '../../services/user.service';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+import { Tag } from 'src/app/models/tag';
+import { TagService } from 'src/app/services/tag.service';
+import { EditTagComponent } from '../edit-tag/edit-tag.component';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Role } from 'src/app/models/user';
 
 @Component({
-    selector: 'app-userlist',
-    templateUrl: './userlist.component.html',
-    styleUrls: ['./userlist.component.css']
+    selector: 'app-tagslist',
+    templateUrl: './tagslist.component.html',
+    styleUrls: ['./tagslist.component.css']
 })
 
-export class UserListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['pseudo', 'firstName', 'fullName', 'email', 'birthDate', 'reputation', 'role', 'actions'];
-    dataSource: MatTableDataSource<User> = new MatTableDataSource();
+export class TagsListComponent implements AfterViewInit, OnDestroy {
+
+    displayedColumns: string[] = ['name', 'actions'];
+    dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
 
@@ -23,20 +27,21 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
-        private userService: UserService,
+        private tagService: TagService,
         private stateService: StateService,
         public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private authenticationService: AuthenticationService
     ) {
-        this.state = this.stateService.userListState;
+        this.state = this.stateService.tagListState;
     }
 
     ngAfterViewInit(): void {
 
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = (data: User, filter: string) => {
-            const str = data.pseudo + ' ' + data.firstName + ' ' + data.firstName +' ' + data.lastName + ' ' + data.reputation +' ' + data.birthDate + ' '  + data.roleAsString;
+        this.dataSource.filterPredicate = (data: Tag, filter: string) => {
+            const str = data.name;
             return str.toLowerCase().includes(filter);
         };
 
@@ -46,8 +51,8 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
     refresh() {
 
-        this.userService.getAll().subscribe(users => {
-            this.dataSource.data = users;
+        this.tagService.getAll().subscribe(tags => {
+            this.dataSource.data = tags;
             this.state.restoreState(this.dataSource);
             this.filter = this.state.filter;
         });
@@ -61,13 +66,13 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             this.dataSource.paginator.firstPage();
     }
 
-    edit(user: User) {
+    edit(tag: Tag) {
 
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false, signup: false } });
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: false } });
         dlg.beforeClose().subscribe(res => {
             if (res) {
-                _.assign(user, res);
-                this.userService.update(res).subscribe(res => {
+                _.assign(tag, res);
+                this.tagService.update(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
@@ -77,29 +82,29 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    delete(user: User) {
+    delete(tag: Tag) {
         const backup = this.dataSource.data;
-        this.dataSource.data = _.filter(this.dataSource.data, m => m.pseudo !== user.pseudo);
-        const snackBarRef = this.snackBar.open(`Member '${user.pseudo}' will be deleted`, 'Undo', { duration: 10000 });
+        this.dataSource.data = _.filter(this.dataSource.data, m => m.name !== tag.name);
+        const snackBarRef = this.snackBar.open(`Tag '${tag.name}' will be deleted`, 'Undo', { duration: 10000 });
 
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction)
-                this.userService.delete(user).subscribe();
+                this.tagService.delete(tag).subscribe();
             else
                 this.dataSource.data = backup;
         });
     }
 
     create() {
-        const user = new User({});
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: false } });
+        const tag = new Tag({});
+        const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: true } });
 
         dlg.beforeClose().subscribe(res => {
             if (res) {
-                this.dataSource.data = [...this.dataSource.data, new User(res)];
-                this.userService.add(res).subscribe(res => {
+                this.dataSource.data = [...this.dataSource.data, new Tag(res)];
+                this.tagService.add(res).subscribe(res => {
                     if (!res) {
-                        this.snackBar.open(`There was an error at the server. The member has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+                        this.snackBar.open(`There was an error at the server. The tag has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
                     }
                 });
@@ -109,6 +114,14 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.snackBar.dismiss();
+    }
+
+    canActivate(){
+        if(this.authenticationService.currentUser == null){
+            return false;
+        }else{
+            return this.authenticationService.currentUser.role == Role.Admin;
+        }
     }
 
 }
