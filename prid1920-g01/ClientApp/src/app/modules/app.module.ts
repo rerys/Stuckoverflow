@@ -9,8 +9,6 @@ import { JwtInterceptor } from '../interceptors/jwt.interceptor';
 import { NavMenuComponent } from '../components/nav-menu/nav-menu.component';
 import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
-import { CounterComponent } from '../components/counter/counter.component';
-import { FetchDataComponent } from '../components/fetch-data/fetch-data.component';
 import { UserListComponent } from '../components/userlist/userlist.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
@@ -38,8 +36,6 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     LoginComponent,
     UserListComponent,
     UnknownComponent,

@@ -40,6 +40,7 @@ namespace prid1920_g01.Controllers
         }
 
         //Read
+        [AllowAnonymous]
         [HttpGet("{pseudo}")]
         public async Task<ActionResult<UserDTO>> GetOne(string pseudo)
         {
@@ -56,6 +57,7 @@ namespace prid1920_g01.Controllers
 
 
         //Read
+        [AllowAnonymous]
         [HttpGet("email/{email}")]
         public async Task<ActionResult<UserDTO>> GetOneByEmail(string email)
         {
