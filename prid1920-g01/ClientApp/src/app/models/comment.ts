@@ -14,7 +14,9 @@ export class Comment {
         this.id = data.id;
         this.body = data.body;
         this.timestamp = data.timestamp;
+        this.userId = data.userId;
         this.user = data.user;
+        this.postId = data.postId;
         this.post = data.post;
     }
 }

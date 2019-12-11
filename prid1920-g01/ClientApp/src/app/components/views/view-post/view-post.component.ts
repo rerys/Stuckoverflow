@@ -2,7 +2,6 @@ import { Component, Input } from "@angular/core";
 import { Post } from "src/app/models/post";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { EditPostService } from "src/app/services/edit-post.service";
-import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'post',
@@ -18,8 +17,7 @@ export class PostComponent{
 
 
     constructor(public editPostService: EditPostService,
-        private authenticationService: AuthenticationService,
-        private route: ActivatedRoute){
+        private authenticationService: AuthenticationService){
     }
 
     activateAction(id: string) {

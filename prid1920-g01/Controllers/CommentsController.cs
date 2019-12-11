@@ -30,8 +30,15 @@ namespace prid1920_g01.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostComment(CommentDTO data)
         {
+            var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //Création d'un object comment depuis le DTO
-            var newComment = data.ToOBJ();
+            var newComment = new Comment()
+                                {
+                                    Body = data.Body,
+                                    UserId = currentUser.Id,
+                                    PostId = data.PostId
+
+                                };
             //Ajout du comment dans le context 
             _context.Comments.Add(newComment);
             //Sauvegarde de l'ajout
@@ -48,7 +55,7 @@ namespace prid1920_g01.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComment(int id, CommentDTO commentDTO)
         {
-            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
+            var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //Contrôle comment appartient à l'user
             if (commentDTO.User.Id != currentUser.Id) { return BadRequest(); }
             //Contrôle commentaire appartient à l'ID du commentaire recherché 
@@ -72,7 +79,7 @@ namespace prid1920_g01.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id) 
         {
-            var currentUser = await _context.Users.FindAsync(User.Identity.Name);
+            var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //récuperation du commentaire dans le context 
             var comment = await _context.Comments.FindAsync(id);
             //Contrôle résultat du context 

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 namespace prid1920_g01.Models
 {
 
-    public class Comment : IValidatableObject
-    { 
+    public class Comment
+    {
 
         [Key]
         public int Id { get; set; }
@@ -15,19 +15,12 @@ namespace prid1920_g01.Models
         public string Body { get; set; }
         [Required(ErrorMessage = "Required Timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.Now;
-        public int UserId { get; set; }
         [Required(ErrorMessage = "Required User")]
+        public int UserId { get; set; }
         public virtual User User { get; set; }
-        public int PostId { get; set; }
         [Required(ErrorMessage = "Required Post")]
+        public int PostId { get; set; }
         public virtual Post Post { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Timestamp != DateTime.Now)
-            {
-                yield return new ValidationResult("Bad DateTime", new[] { nameof(Timestamp) });
-            }
-        }
     }
 }

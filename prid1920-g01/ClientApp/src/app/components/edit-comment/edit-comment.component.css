@@ -1,0 +1,41 @@
+.butt{
+    margin-top: 15px;
+  }
+  .btn {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    .btn-success {
+      font-family: Raleway-SemiBold;
+      font-size: 13px;
+      color: rgba(103, 192, 103, 0.75);
+      letter-spacing: 1px;
+      line-height: 15px;
+      border: 2px solid rgba(103, 192, 103, 0.75);
+      border-radius: 40px;
+      background: transparent;
+      transition: all 0.3s ease 0s;
+    }
+    
+    .btn-success:hover {
+      color: #FFF;
+      background: rgb(103, 192, 103, 0.75);
+      border: 2px solid rgb(103, 192, 103, 0.75);
+    }  
+    .btn-danger {
+      font-family: Raleway-SemiBold;
+      font-size: 13px;
+      color: rgba(217, 83, 78, 0.75);
+      letter-spacing: 1px;
+      line-height: 15px;
+      border: 2px solid rgba(217, 83, 78, 0.75);
+      border-radius: 40px;
+      background: transparent;
+      transition: all 0.3s ease 0s;
+    }
+    
+    .btn-danger:hover {
+      color: #FFF;
+      background: rgba(217, 83, 78, 0.75);
+      border: 2px solid rgba(217, 83, 78, 0.75);
+    }

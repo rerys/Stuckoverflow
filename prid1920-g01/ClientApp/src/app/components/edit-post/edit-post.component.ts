@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/models/post';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { EditPostService } from 'src/app/services/edit-post.service';
 
 
 @Component({
@@ -15,7 +11,7 @@ import { EditPostService } from 'src/app/services/edit-post.service';
 export class EditPostComponent {
 
   @Input() post = this.data.post;
-  new: boolean = true;
+ 
   options: any = {
     autoScrollEditorIntoView: true,
     maxLines: 28,
@@ -27,9 +23,6 @@ export class EditPostComponent {
   constructor(public dialogRef: MatDialogRef<EditPostComponent>,
 
     @Inject(MAT_DIALOG_DATA) public data: { post: Post; isNew: boolean; },
-    private postService: PostService,
-    private route: ActivatedRoute,
-    //public editPostService: EditPostService
 
   ) {
 
