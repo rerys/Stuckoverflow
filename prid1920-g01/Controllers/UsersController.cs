@@ -162,7 +162,7 @@ namespace prid1920_g01.Controllers
         [HttpDelete("{pseudo}")]
         public async Task<IActionResult> DeleteUser(string pseudo)
         {
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.Where(u => u.Pseudo == pseudo).SingleOrDefaultAsync();
 
             if (user == null)
                 return NotFound();

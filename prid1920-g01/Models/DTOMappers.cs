@@ -51,10 +51,6 @@ namespace prid1920_g01.Models
                 BirthDate = user.BirthDate,
                 Reputation = user.Reputation,
                 Role = user.Role,
-                Posts = user.Posts.ToDTO(),
-                Votes = user.Votes.ToDTO(),
-                Comments = user.Comments.ToDTO()
-
             };
 
         }
@@ -88,14 +84,15 @@ namespace prid1920_g01.Models
                 Id = u.Id,
                 Pseudo = u.Pseudo,
                 Email = u.Email,
+                Password = u.Password,
                 LastName = u.LastName,
                 FirstName = u.FirstName,
                 BirthDate = u.BirthDate,
                 Reputation = u.Reputation,
                 Role = u.Role,
-                Posts = u.Posts.ToOBJ(),
-                Votes = u.Votes.ToOBJ(),
-                Comments = u.Comments.ToOBJ()
+                // Posts = u.Posts.ToOBJ(),
+                // Votes = u.Votes.ToOBJ(),
+                // Comments = u.Comments.ToOBJ()
             };
         }
 
