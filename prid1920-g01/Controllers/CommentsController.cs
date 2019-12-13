@@ -26,27 +26,34 @@ namespace prid1920_g01.Controllers
         }
 
 
-        //Create un nouveau comment
+        public async Task<ActionResult<CommentDTO>> Getone(int userId, int postId)
+        {
+            var comment = await _context.Comments.Where(p => p.UserId == userId && p.PostId == postId).SingleOrDefaultAsync();
+            if (comment == null) { return NotFound(); }
+            return comment.ToDTO();
+        }
+
+        //Create un nouveau comment 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostComment(CommentDTO data)
+        public async Task<ActionResult<CommentDTO>> PostComment(CommentDTO data)
         {
             var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //Création d'un object comment depuis le DTO
             var newComment = new Comment()
-                                {
-                                    Body = data.Body,
-                                    UserId = currentUser.Id,
-                                    PostId = data.PostId
+            {
+                Body = data.Body,
+                UserId = currentUser.Id,
+                PostId = data.PostId
 
-                                };
+            };
             //Ajout du comment dans le context 
             _context.Comments.Add(newComment);
             //Sauvegarde de l'ajout
             var res = await _context.SaveChangesAsyncWithValidation();
             //Contrôle de la sauvegarde 
             if (!res.IsEmpty) { return BadRequest(res); }
-            return NoContent();
-            //return CreatedAtAction(nameof(GetOne), new { pseudo = newUser.Pseudo }, newUser.ToDTO());
+            //return NoContent();
+            return CreatedAtAction(nameof(Getone), new { userId = newComment.UserId, postId = newComment.PostId }, newComment.ToDTO());
 
         }
 
@@ -77,7 +84,7 @@ namespace prid1920_g01.Controllers
 
         //Delete d'un comment 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteComment(int id) 
+        public async Task<IActionResult> DeleteComment(int id)
         {
             var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //récuperation du commentaire dans le context 

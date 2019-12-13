@@ -12,14 +12,14 @@ import { Comment } from '../../../models/comment';
 
 export class CommentsComponents {
 
-    @Input() data = new Comment({});
+    @Input() data: Comment[];
     @Input() postId: string;
 
     constructor(private authenticationService: AuthenticationService,
         public editCommentService: EditCommentService) {
 
     }
- 
+
 
     activateAction(id: string) {
         return this.authenticationService.currentUser.id != id;
@@ -29,14 +29,27 @@ export class CommentsComponents {
     get currentUser() { return this.authenticationService.currentUser; }
 
     edit(comment: Comment) {
-        this.editCommentService.edit(comment).subscribe();
+        var backUp = new Comment(comment);
+        this.editCommentService.edit(comment).subscribe(res => {
+            if (!res) {
+                comment.body = backUp.body;
+            }
+ 
+        });
     }
 
     delete(comment: Comment) {
-        this.editCommentService.delete(comment).subscribe();
+        this.editCommentService.delete(comment).subscribe(res => {
+            if (res) {
+                this.data.splice(this.data.indexOf(comment), 1);
+            }
+        }
+        );
     }
     create() {
-        this.editCommentService.create(this.postId).subscribe();
+        this.editCommentService.create(this.postId).subscribe(res => {
+            this.data.push(res);
+        });
     }
 
 

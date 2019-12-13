@@ -10,14 +10,14 @@ import { EditPostService } from "src/app/services/edit-post.service";
 })
 
 
-export class PostComponent{
+export class PostComponent {
 
     @Input() data: Post;
     @Input() id: number;
 
 
     constructor(public editPostService: EditPostService,
-        private authenticationService: AuthenticationService){
+        private authenticationService: AuthenticationService) {
     }
 
     activateAction(id: string) {
@@ -27,16 +27,30 @@ export class PostComponent{
 
     get currentUser() { return this.authenticationService.currentUser; }
 
-    delete(post: Post) {
-        this.editPostService.delete(post).subscribe();
+    delete(post: Post) { 
+        this.editPostService.delete(post).subscribe(res => {
+            if (res) {
+                delete this.data;
+            }
+        });
     }
 
     edit(post: Post) {
-        this.editPostService.edit(post).subscribe();
+        var backUp = new Post(post);
+        this.editPostService.edit(post).subscribe(res => {
+            if (!res) {
+                post.body = backUp.body;
+            }
+        }
+        );
     }
 
     onReply() {
-        this.editPostService.addReply(this.id).subscribe();
+        this.editPostService.addReply(this.id).subscribe(res => {
+            if (res) {
+                this.data.responses.push(res);
+            }
+        });
     }
 
 

@@ -24,7 +24,7 @@ export class EditCommentComponent {
   constructor(public dialogRef: MatDialogRef<EditCommentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { comment: Comment; isNew: boolean; },
   ) {
-    console.log(data.comment);
+
   }
 
 

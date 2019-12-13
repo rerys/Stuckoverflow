@@ -14,7 +14,7 @@ export class CommentService{
     public update(c: Comment): Observable<boolean> {
         return this.http.put<Comment>(`${this.baseUrl}api/comments/${c.id}`, c).pipe(
           map(res => true),
-          catchError(err => {
+          catchError(err => { 
             console.error(err);
             return of(false);
           })
@@ -31,13 +31,12 @@ export class CommentService{
         );
       }
     
-      public add(c: Comment): Observable<boolean> {
+      public add(c: Comment): Observable<Comment> {
         return this.http.post<Comment>(`${this.baseUrl}api/comments`, c).pipe(
-          map(res => true),
-          catchError(err => {
-            console.error(err);
-            return of(false);
-          })
+          map(res => !res? null : new Comment(res)),
+          catchError(err => 
+            of(null)
+          )
         );
       }
 }

@@ -96,7 +96,7 @@ export class QuestionsListComponent {
     onCreate() {
         this.editPostService.create().subscribe(res => {
             if(res){
-                this.getQuestions();
+                this.posts.push(res);
             }
         });
     }

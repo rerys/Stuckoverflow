@@ -10,37 +10,37 @@ export class PostService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
 
-getQuestions(filter: string) {
+  getQuestions(filter: string) {
     return this.http.get<[Post]>(`${this.baseUrl}api/posts/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-getQuestionsByNewest(filter: string) {
+  getQuestionsByNewest(filter: string) {
     return this.http.get<[Post]>(`${this.baseUrl}api/posts/newest/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-getQuestionsByVotes(filter: string) {
+  getQuestionsByVotes(filter: string) {
     return this.http.get<[Post]>(`${this.baseUrl}api/posts/votes/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-getQuestionsByUnanswered(filter: string) {
+  getQuestionsByUnanswered(filter: string) {
     return this.http.get<[Post]>(`${this.baseUrl}api/posts/unanswered/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-getQuestionsByTags(filter: string) {
+  getQuestionsByTags(filter: string) {
     return this.http.get<[Post]>(`${this.baseUrl}api/posts/tags/${filter}`).pipe(
       map(res => res.map(p => new Post(p)))
     );
   }
 
-getQuestionById(id: number){
+  getQuestionById(id: number) {
     return this.http.get<Post>(`${this.baseUrl}api/posts/question/${id}`).pipe(
       map(p => !p ? null : new Post(p)),
       catchError(err => of(null))
@@ -68,25 +68,28 @@ getQuestionById(id: number){
     );
   }
 
-  public add(p: Post): Observable<boolean> {
+
+  public add(p: Post): Observable<Post> {
 
     return this.http.post<Post>(`${this.baseUrl}api/posts`, p).pipe(
-      map(res => true),
+      map(res => !res ? null : new Post(res)),
       catchError(err => {
         console.error(err);
-        return of(false);
-      })
+        return of(null);
+      }
+      )
     );
   }
 
-  public addReply(idParent: number, p: Post): Observable<boolean> {
+  public addReply(idParent: number, p: Post): Observable<Post> {
 
-    return this.http.post<Post>(`${this.baseUrl}api/posts/${idParent}`, p).pipe( 
-      map(res => true),
+    return this.http.post<Post>(`${this.baseUrl}api/posts/${idParent}`, p).pipe(
+      map(res => !res ? null : new Post(res)),
       catchError(err => {
         console.error(err);
-        return of(false);
-      })
+        return of(null);
+      }
+      )
     );
   }
 

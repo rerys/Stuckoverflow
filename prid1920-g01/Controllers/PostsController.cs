@@ -85,6 +85,13 @@ namespace prid1920_g01.Controllers
             return post.ToDTO();
         }
 
+        public async Task<ActionResult<PostDTO>> GetQuestionByBody(string b)
+        {
+            var post = await _context.Posts.Where(p => p.Body == b).SingleOrDefaultAsync();
+            if (post == null) { return NotFound(); }
+            return post.ToDTO();
+        }
+
         //Create new Post
         [HttpPost]
         public async Task<ActionResult<PostDTO>> PostPost(PostDTO data)
@@ -97,7 +104,7 @@ namespace prid1920_g01.Controllers
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return CreatedAtAction(nameof(GetAll), newPost.ToDTO());
+            return CreatedAtAction(nameof(GetQuestionByBody), new { Body = newPost.Body }, newPost.ToDTO());
         }
 
         [HttpPost("{idParent}")]
@@ -117,7 +124,7 @@ namespace prid1920_g01.Controllers
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return CreatedAtAction(nameof(GetAll), newPost.ToDTO());
+            return CreatedAtAction(nameof(GetQuestionByBody), new { Body = newPost.Body }, newPost.ToDTO());
         }
 
 
@@ -136,7 +143,7 @@ namespace prid1920_g01.Controllers
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return NoContent(); 
+            return NoContent();
         }
 
 
