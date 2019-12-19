@@ -45,7 +45,7 @@ namespace prid1920_g01.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccpetedId");
+                    b.Property<int?>("AcceptedAnswerId");
 
                     b.Property<string>("Body")
                         .IsRequired();
@@ -60,7 +60,7 @@ namespace prid1920_g01.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccpetedId");
+                    b.HasIndex("AcceptedAnswerId");
 
                     b.HasIndex("ParentId");
 
@@ -169,7 +169,8 @@ namespace prid1920_g01.Migrations
                 {
                     b.HasOne("prid1920_g01.Models.Post", "Accpeted")
                         .WithMany()
-                        .HasForeignKey("AccpetedId");
+                        .HasForeignKey("AcceptedAnswerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("prid1920_g01.Models.Post", "Parent")
                         .WithMany("Responses")

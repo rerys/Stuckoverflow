@@ -45,7 +45,7 @@
                 <div class="stats">
                     <div class="vote">
                         <div class="votes">
-                            <span class="vote-count-post "><strong>{{ p.votes.length }}</strong></span>
+                            <span class="vote-count-post "><strong>{{ p.score }}</strong></span>
                             <div class="viewcount">votes</div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                         'accepted': p.accepted != null
                       }">
                         <strong>{{ p.responses.length }}</strong>
-                        answers
+                        answers 
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                             <a href="#">{{p.user.pseudo}}</a>
                         </div>
 
-                        <img src="user.png" alt="" class="bar-sm" width="32" height="32">
+                        <img src="" alt="" class="bar-sm" width="32" height="32">
 
                         <div class="added text-muted font-italic">
                             <a href="#" class="text-reset">added <span title="2019-11-30 18:15:09Z"

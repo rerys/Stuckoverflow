@@ -14,8 +14,10 @@ namespace prid1920_g01.Models
         //                                                                                                          //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static AuthenticateUserDTO AuthenticateDTO(this User user){
-            return new AuthenticateUserDTO{
+        public static AuthenticateUserDTO AuthenticateDTO(this User user)
+        {
+            return new AuthenticateUserDTO
+            {
                 Id = user.Id,
                 Pseudo = user.Pseudo,
                 Email = user.Email,
@@ -108,9 +110,31 @@ namespace prid1920_g01.Models
         //                                                                                                          //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        public static PostDTO ScoredToPost(this ScoredPost s)
+        {
+            PostDTO p = s.Post.ToDTO();
+            p.Score = s.MaxScore;
+            return p;
+
+        }
+
+        public static List<PostDTO> ScoredToPost(this IEnumerable<ScoredPost> s)
+        {
+            return s.Select(p => p.ScoredToPost()).ToList();
+        }
+
+
         //convertisseur d'un Post vers un PostDTO
         public static PostDTO ToDTO(this Post post)
         {
+            PostDTO acc;
+            if (post.Accpeted != null)
+            {
+                acc = post.Accpeted.ToDTO();
+            }else{
+                acc = null;
+            }
 
             return new PostDTO
             {
@@ -131,9 +155,7 @@ namespace prid1920_g01.Models
 
                 }).ToList(),
 
-                // Accepted = new PostDTO{
-                //     Id = post.Accpeted.Id
-                // },
+                Accepted = acc,
 
                 Tags = post.Tags.Select(t => new TagDTO
                 {
@@ -145,14 +167,6 @@ namespace prid1920_g01.Models
                 {
                     UpDown = r.UpDown
                 }).ToList(),
-
-                // Comments = post.Comments.Select(t => new CommentDTO
-                // {
-                //     Id = t.Id,
-                //     Body = t.Body
-
-                // }).ToList()
-
 
                 Comments = post.Comments.ToDTO()
 

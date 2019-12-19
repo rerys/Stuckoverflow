@@ -368,9 +368,9 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                             );
 
                             context.SaveChanges();
-                            // var post4 = context.Posts.Find(4);
-                            // post4.AcceptedAnswerId = 5;
-                            // context.SaveChanges();
+                            var post4 = context.Posts.Find(4);
+                            post4.AcceptedAnswerId = 5;
+                            context.SaveChanges();
 
                         }
 

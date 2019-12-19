@@ -93,4 +93,28 @@ export class PostService {
     );
   }
 
+  public acceptPost( response: Post): Observable<Post> {
+
+    return this.http.get<Post>(`${this.baseUrl}api/posts/acceptPost/${response.id}`).pipe(
+      map(res => !res ? null : new Post(res)),
+      catchError(err => {
+        console.error(err);
+        return of(null);
+      }
+      )
+    );
+  }
+
+  public unAcceptPost( response: Post): Observable<Post> {
+
+    return this.http.get<Post>(`${this.baseUrl}api/posts/unAcceptPost/${response.id}`).pipe(
+      map(res => !res ? null : new Post(res)),
+      catchError(err => {
+        console.error(err);
+        return of(null);
+      }
+      )
+    );
+  }
+
 }

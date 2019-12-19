@@ -64,7 +64,7 @@ namespace prid1920_g01.Controllers
         {
             var currentUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             //Contrôle comment appartient à l'user
-            if (commentDTO.User.Id != currentUser.Id) { return BadRequest(); }
+            if (!(commentDTO.User.Id == currentUser.Id || currentUser.Role == Role.Admin)) { return BadRequest(); }
             //Contrôle commentaire appartient à l'ID du commentaire recherché 
             if (id != commentDTO.Id) { return BadRequest(); }
             //récuperation du commentaire dans le context 
@@ -92,7 +92,7 @@ namespace prid1920_g01.Controllers
             //Contrôle résultat du context 
             if (comment == null) { return NotFound(); }
             //Contrôle comment appartient à l'user
-            if (currentUser.Id != comment.User.Id) { return BadRequest(); }
+            if (!(comment.User.Id == currentUser.Id || currentUser.Role == Role.Admin)) { return BadRequest(); }
             //Suppression du comment dans le context
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();

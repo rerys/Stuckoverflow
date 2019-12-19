@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { EditCommentService } from "src/app/services/edit-comment.service";
 import { Comment } from '../../../models/comment';
+import { Role } from "src/app/models/user";
 
 
 @Component({
@@ -22,8 +23,7 @@ export class CommentsComponents {
 
 
     activateAction(id: string) {
-        return this.authenticationService.currentUser.id != id;
-
+        return !(this.authenticationService.currentUser.id == id || this.authenticationService.currentUser.role == Role.Admin);
     }
 
     get currentUser() { return this.authenticationService.currentUser; }

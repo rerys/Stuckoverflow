@@ -71,11 +71,6 @@ export class EditPostService implements OnDestroy {
                 return of(false);
             }) 
         );
-        // snackBarRef.afterDismissed().subscribe(res => {
-        //     if (!res.dismissedByAction) { return this.postService.delete(post).subscribe(); }
-
-        // });
-        // return of(false);
     }
 
 
@@ -96,6 +91,34 @@ export class EditPostService implements OnDestroy {
         );
         //TODO add snack bar
     }
+
+    accept(post: Post): Observable<Post> {
+        const snackBarRef = this.snackBar.open(`This post will be accepted`, 'Undo', { duration: 10000 });
+
+        return snackBarRef.afterDismissed().pipe(
+            flatMap(res => {
+                if(!res.dismissedByAction){
+                    return this.postService.acceptPost(post);
+                }
+                return of(null);
+            }) 
+        );
+    }
+
+    unAccept(post: Post): Observable<Post> {
+        const snackBarRef = this.snackBar.open(`This post will be deleted`, 'Undo', { duration: 10000 });
+
+        return snackBarRef.afterDismissed().pipe(
+            flatMap(res => {
+                if(!res.dismissedByAction){
+                    return this.postService.unAcceptPost(post);
+                }
+                return of(null);
+            }) 
+        );
+    }
+
+    
 
     ngOnDestroy(): void {
         this.snackBar.dismiss();

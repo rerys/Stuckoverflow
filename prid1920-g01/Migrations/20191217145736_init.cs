@@ -51,15 +51,15 @@ namespace prid1920_g01.Migrations
                     Body = table.Column<string>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     ParentId = table.Column<int>(nullable: true),
-                    AccpetedId = table.Column<int>(nullable: true),
+                    AcceptedAnswerId = table.Column<int>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Posts_AccpetedId",
-                        column: x => x.AccpetedId,
+                        name: "FK_Posts_Posts_AcceptedAnswerId",
+                        column: x => x.AcceptedAnswerId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -165,9 +165,9 @@ namespace prid1920_g01.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_AccpetedId",
+                name: "IX_Posts_AcceptedAnswerId",
                 table: "Posts",
-                column: "AccpetedId");
+                column: "AcceptedAnswerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_ParentId",

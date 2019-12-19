@@ -81,7 +81,7 @@ export class QuestionsListComponent {
                 this.posts = q;
             });
 
-        } else if (this.unanswered) {
+        } else if (this.unansweredActive) {
             this.postService.getQuestionsByUnanswered(this.filter).subscribe(q => {
                 this.posts = q;
             });

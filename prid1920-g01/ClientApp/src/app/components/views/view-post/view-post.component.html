@@ -1,10 +1,25 @@
 <div class="card w-80" *ngIf="data != null">
-    <div class="card-header">
+    <div class="card-header" [ngClass]="{
+        'card text-white bg-success mb-3': accepted
+      }">
+
+
+
         <h2 *ngIf="data.title != null">{{data.title}}</h2>
         <div class="row card-text">
-            <div class="text-right">
+            <div class="text-right" *ngIf="activateButtonAcceptResponse()">
+                <button *ngIf="!accepted && postToAccept.accepted == null" mat-icon-button title="accept">
+                    <mat-icon (click)="toAccept(data)">done_outline</mat-icon>
+                </button>
+                <button *ngIf="accepted" mat-icon-button title="clear">
+                    <mat-icon (click)="toClear(data)">clear</mat-icon>
+                </button>
+            </div>
+            <div>
+
                 <small class="text-muted">Posted: {{data.timestamp | date:'short'}}</small>
             </div>
+
             <div class="ml-auto">
                 <p>{{data.user?.pseudo}}</p>
             </div>
@@ -14,10 +29,10 @@
         <div class="quest">
             <markdown data="{{data.body}}"></markdown>
             <tags [data]="data.tags"></tags>
-        </div>
+        </div> 
         <div style="clear: both"></div>
 
-        <div class=" clearfix">
+        <div class=" clearfix"> 
             <button type="button" *ngIf="currentUser && activateAction(data.user?.id) && data.title != null"
                 class="btn float-right btn-primary btn-lg " (click)="onReply()">Reply to this
                 question</button>
@@ -32,8 +47,7 @@
             </div>
         </div>
 
-        <comments [data]="data.comments"
-        [postId]="data.id"></comments>
+        <comments [data]="data.comments" [postId]="data.id"></comments>
 
     </div>
 

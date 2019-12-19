@@ -18,6 +18,7 @@ export class Post {
     tags: Tag[];
     votes: Vote[];
     comments: Comment[];
+    score: string;
 
     constructor(data: any) {
         this.id = data.id;
@@ -33,6 +34,7 @@ export class Post {
         this.tags = data.tags;
         this.votes = data.votes;
         this.comments = data.comments;
+        this.score = data.score;
     }
 
 }

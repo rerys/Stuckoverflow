@@ -26,54 +26,132 @@ namespace prid1920_g01.Controllers
         [AllowAnonymous]
         [HttpGet("{filter}")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetAll(string filter = "")
+        public ActionResult<IEnumerable<PostDTO>> GetAll(string filter = "")
         {
-            var posts = await _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter))).ToListAsync();
-            if (posts == null) { return NoContent(); }
-            return posts.ToDTO();
+
+            var q = _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter)))
+                 .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+                 {
+                     p.Id,
+                     ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                     UpDown = v == null ? 0 : v.UpDown,
+                 })
+                 .GroupBy(pv => new { pv.Id, pv.ParentId })
+                 .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+                 .AsEnumerable()
+                 .GroupBy(p => p.ParentId)
+                 .Select(g => new ScoredPost { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+                 ;
+
+            if (q == null) { return NoContent(); }
+            return q.ScoredToPost();
         }
 
         [AllowAnonymous]
         [HttpGet("newest")]
         [HttpGet("newest/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetNewest(string filter = "")
+        public ActionResult<IEnumerable<PostDTO>> GetNewest(string filter = "")
         {
-            var posts = await _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter))).ToListAsync();
-            posts = posts.OrderByDescending(p => p.Timestamp).ToList();
-            if (posts == null) { return NoContent(); }
-            return posts.ToDTO();
+            var q = _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter)))
+                 .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+                 {
+                     p.Id,
+                     ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                     UpDown = v == null ? 0 : v.UpDown,
+                 })
+                 .GroupBy(pv => new { pv.Id, pv.ParentId })
+                 .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+                 .AsEnumerable()
+                 .GroupBy(p => p.ParentId)
+                 .Select(g => new ScoredPost { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+                 .OrderByDescending(r => r.Post.Timestamp)
+                 ;
+
+            if (q == null) { return NoContent(); }
+            return q.ScoredToPost();
         }
 
         [AllowAnonymous]
         [HttpGet("votes")]
         [HttpGet("votes/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetVotes(string filter = "")
+        public ActionResult<IEnumerable<PostDTO>> GetVotes(string filter = "")
         {
-            var posts = await _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter))).ToListAsync();
-            posts = posts.OrderByDescending(p => p.Votes.Count()).ToList();
-            if (posts == null) { return NoContent(); }
-            return posts.ToDTO();
+
+            var q = _context.Posts.Where(p => p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter)))
+                           .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+                           {
+                               p.Id,
+                               ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                               UpDown = v == null ? 0 : v.UpDown,
+                           })
+                           .GroupBy(pv => new { pv.Id, pv.ParentId })
+                           .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+                           .AsEnumerable()
+                           .GroupBy(p => p.ParentId)
+                           .Select(g => new ScoredPost { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+                           .OrderByDescending(r => r.MaxScore)
+                           ;
+
+            if (q == null) { return NoContent(); }
+            return q.ScoredToPost();
         }
 
         [AllowAnonymous]
         [HttpGet("unanswered")]
         [HttpGet("unanswered/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetUnanswered(string filter)
+        public ActionResult<IEnumerable<PostDTO>> GetUnanswered(string filter)
         {
-            var posts = await _context.Posts.Where(p => p.Title != null && p.Responses.Count() == 0 && (p.Title.Contains(filter) || p.Body.Contains(filter))).ToListAsync();
-            if (posts == null) { return NoContent(); }
-            return posts.ToDTO();
+            if (filter == null)
+            {
+                filter = "";
+            }
+
+            var q = _context.Posts.Where(p => (p.Title != null && (p.Title.Contains(filter) || p.Body.Contains(filter))) && (from r in p.Responses select r).Count() == 0)
+                .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+                {
+                    p.Id,
+                    ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                    UpDown = v == null ? 0 : v.UpDown,
+                })
+                .GroupBy(pv => new { pv.Id, pv.ParentId })
+                .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+                .AsEnumerable()
+                .GroupBy(p => p.ParentId)
+                .Select(g => new ScoredPost { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+                .OrderByDescending(r => r.Post.Timestamp)
+                ;
+
+            if (q == null) { return NoContent(); }
+            return q.ScoredToPost();
         }
 
         [AllowAnonymous]
         [HttpGet("tags")]
         [HttpGet("tags/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetTags(string filter)
+        public ActionResult<IEnumerable<PostDTO>> GetTags(string filter)
         {
-            var posts = await _context.Posts.Where(p => p.Tags == null && (p.Title.Contains(filter) || p.Body.Contains(filter))).ToListAsync();
-            posts = posts.OrderByDescending(p => p.Tags.Count()).ToList();
-            if (posts == null) { return NoContent(); }
-            return posts.ToDTO();
+            if (filter == null)
+            {
+                filter = "";
+            }
+            var q = _context.Posts.Where(p => p.Title != null).AsEnumerable().Where(p => p.Tags.Count() > 0 &&
+            (from t in p.Tags where t.Name.Contains(filter) select t).Count() > 0)
+               .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+               {
+                   p.Id,
+                   ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                   UpDown = v == null ? 0 : v.UpDown,
+               })
+               .GroupBy(pv => new { pv.Id, pv.ParentId })
+               .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+               .AsEnumerable()
+               .GroupBy(p => p.ParentId)
+               .Select(g => new ScoredPost { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+               .OrderByDescending(r => r.Post.Timestamp)
+               ;
+
+            if (q == null) { return NoContent(); }
+            return q.ScoredToPost();
         }
 
         [AllowAnonymous]
@@ -117,9 +195,7 @@ namespace prid1920_g01.Controllers
 
             var newPost = data.ToOBJ();
             newPost.UserId = user.Id;
-            //newPost.User = user;
             newPost.ParentId = idParent;
-            //newPost.Parent = post;
             _context.Posts.Add(newPost);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
@@ -129,11 +205,11 @@ namespace prid1920_g01.Controllers
 
 
         //Update a post
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] 
         public async Task<IActionResult> PutPost(int id, PostDTO postDTO)
         {
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
-            if (postDTO.User.Id != connectedUser.Id) { return BadRequest(); }
+            if (!(postDTO.User.Id == connectedUser.Id  || connectedUser.Role == Role.Admin)) { return BadRequest(); }
             if (id != postDTO.Id) { return BadRequest(); }
             var post = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
             if (post == null)
@@ -153,12 +229,44 @@ namespace prid1920_g01.Controllers
         {
             var post = await _context.Posts.FindAsync(id);
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
-            if (post.User.Id != connectedUser.Id) { return BadRequest(); }
+            if (!(post.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
             if (post == null)
                 return NotFound();
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+
+        [HttpGet("acceptPost/{id}")]
+        public  async Task<ActionResult<PostDTO>> acceptPost(int id)
+        {
+            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
+            var response = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
+            if (response == null) { return NotFound(); }
+            var question = response.Parent;
+            if (question.User.Id != connectedUser.Id) return BadRequest();
+            question.AcceptedAnswerId = response.Id;
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return CreatedAtAction(nameof(GetQuestion), new { id = question.Id }, question.ToDTO());
+        }
+
+        [HttpGet("unAcceptPost/{id}")]
+        public  async Task<ActionResult<PostDTO>> unAcceptPost(int id)
+        {
+            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
+            var response = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
+            if (response == null) { return NotFound(); }
+            var question = response.Parent;
+            if (question.User.Id != connectedUser.Id) return BadRequest();
+            question.AcceptedAnswerId = response.Id;
+            question.AcceptedAnswerId = null;
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return CreatedAtAction(nameof(GetQuestion), new { id = question.Id }, question.ToDTO());
         }
     }
 }

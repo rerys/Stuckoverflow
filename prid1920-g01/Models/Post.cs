@@ -8,7 +8,7 @@ namespace prid1920_g01.Models
 {
 
     public class Post : IValidatableObject
-    { 
+    {
 
         [Key]
         public int Id { get; set; }
@@ -20,6 +20,7 @@ namespace prid1920_g01.Models
         public int? ParentId { get; set; }
         public virtual Post Parent { get; set; }
         public virtual IList<Post> Responses { get; set; } = new List<Post>();
+        public int? AcceptedAnswerId { get; set; }
         public virtual Post Accpeted { get; set; }
         public int UserId { get; set; }
         [Required(ErrorMessage = "Must have an user")]
@@ -48,10 +49,10 @@ namespace prid1920_g01.Models
             // {
             //     yield return new ValidationResult("An answer can not have an answer", new[] { nameof(Responses) });
             // }
-            if (Accpeted != null && Parent == null)
-            {
-                yield return new ValidationResult("A question cannot be accepted", new[] { nameof(Accpeted) });
-            }
+            // if (Accpeted != null && Parent == null)
+            // {
+            //     yield return new ValidationResult("A question cannot be accepted", new[] { nameof(Accpeted) });
+            // }
             if (Accpeted != null && (from r in Responses where r.Accpeted != null select r).SingleOrDefault() != null)
             {
                 yield return new ValidationResult("There is already an accepted answer", new[] { nameof(Accpeted) });

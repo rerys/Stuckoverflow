@@ -19,6 +19,7 @@ namespace prid1920_g01.Models
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
+        public DbQuery<ScoredPost> ScoredPosts { get; set; }
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -68,6 +69,13 @@ namespace prid1920_g01.Models
                 .HasOne(P => P.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Post.accepted
+            modelBuilder.Entity<Post>()
+                .HasOne(P => P.Accpeted)
+                .WithMany()
+                .HasForeignKey(p => p.AcceptedAnswerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Vote.post (1) <--> Post.votes (*)

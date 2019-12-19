@@ -20,6 +20,7 @@ namespace prid1920_g01.Models
         public IEnumerable<TagDTO> Tags { get; set; }
         public IEnumerable<VoteDTO> Votes { get; set; }
         public IEnumerable<CommentDTO> Comments { get; set; }
+        public int Score { get; set; }
 
 
     }
