@@ -10,17 +10,17 @@ namespace prid1920_g01.Models
     {
         [Required(ErrorMessage = "Required Vote")]
         public int UpDown { get; set; }
+        [Required]
         public int UserId { get; set; }
-        [Required(ErrorMessage = "Required User")]
         public virtual User User { get; set; }
+        [Required]
         public int PostId { get; set; }
-        [Required(ErrorMessage = "Required Post")]
         public virtual Post Post { get; set; }
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (UpDown != -1 || UpDown != 1)
+            if (!(UpDown == -1 || UpDown == 1))
             {
                 yield return new ValidationResult("Vote only accept -1 or 1", new[] { nameof(UpDown) });
             }

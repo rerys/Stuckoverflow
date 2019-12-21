@@ -3,16 +3,14 @@
     <post [data]="question" [id]="id"></post>
 
     <div class="post">
-        <post [data]="question.accepted" 
-        [id]="id" 
+        <post [data]="accepted" 
         [accepted]="true"
-        [postToAccept]="question"></post>
+       ></post>
     </div>
-    <div class="post" *ngFor="let r of question.responses">
-        <post *ngIf="question.accepted?.id != r.id" 
+    <div class="post" *ngFor="let r of responses">
+        <post *ngIf="accepted?.id != r.id" 
         [data]="r" 
-        [id]="id" 
-        [postToAccept]="question"></post>
+      ></post>
     </div>
  
 </div>

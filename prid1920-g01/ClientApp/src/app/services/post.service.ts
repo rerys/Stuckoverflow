@@ -2,11 +2,59 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/post';
 import { map, flatMap, catchError, timestamp } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 
 export class PostService {
+
+  question: Post;
+  questionSubject = new Subject<Post>();
+
+  accepted: Post;
+  acceptedSubject = new Subject<Post>();
+
+  responses: Post[] = [];
+  responsesSubject = new Subject<Post[]>();
+
+
+  public emitAllResponses() {
+    this.responsesSubject.next(this.responses.slice());
+  }
+
+  public emitQuestion() {
+    this.questionSubject.next(this.question);
+  }
+
+  public emitAccepted() {
+    this.acceptedSubject.next(this.accepted);
+  }
+
+  public emitPost() {
+    this.responsesSubject.next(this.responses);
+  }
+
+
+  public getRefrechPost(id: number) {
+
+    this.getQuestionById(id).subscribe(post => {
+      this.question = post;
+      this.responses = post.responses;
+      this.accepted = post.accepted;
+
+
+      this.emitQuestion();
+      this.emitAccepted();
+      this.emitPost();
+    });
+
+  }
+
+
+
+
+
+
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
 
@@ -93,7 +141,7 @@ export class PostService {
     );
   }
 
-  public acceptPost( response: Post): Observable<Post> {
+  public acceptPost(response: Post): Observable<Post> {
 
     return this.http.get<Post>(`${this.baseUrl}api/posts/acceptPost/${response.id}`).pipe(
       map(res => !res ? null : new Post(res)),
@@ -105,7 +153,7 @@ export class PostService {
     );
   }
 
-  public unAcceptPost( response: Post): Observable<Post> {
+  public unAcceptPost(response: Post): Observable<Post> {
 
     return this.http.get<Post>(`${this.baseUrl}api/posts/unAcceptPost/${response.id}`).pipe(
       map(res => !res ? null : new Post(res)),

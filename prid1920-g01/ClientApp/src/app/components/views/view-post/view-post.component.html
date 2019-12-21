@@ -8,7 +8,7 @@
         <h2 *ngIf="data.title != null">{{data.title}}</h2>
         <div class="row card-text">
             <div class="text-right" *ngIf="activateButtonAcceptResponse()">
-                <button *ngIf="!accepted && postToAccept.accepted == null" mat-icon-button title="accept">
+                <button *ngIf="!accepted && noAccepted()" mat-icon-button title="accept">
                     <mat-icon (click)="toAccept(data)">done_outline</mat-icon>
                 </button>
                 <button *ngIf="accepted" mat-icon-button title="clear">
@@ -25,26 +25,57 @@
             </div>
         </div>
     </div>
-    <div class="card-text">
-        <div class="quest">
-            <markdown data="{{data.body}}"></markdown>
-            <tags [data]="data.tags"></tags>
-        </div> 
-        <div style="clear: both"></div>
+ 
 
-        <div class=" clearfix"> 
-            <button type="button" *ngIf="currentUser && activateAction(data.user?.id) && data.title != null"
-                class="btn float-right btn-primary btn-lg " (click)="onReply()">Reply to this
-                question</button>
-            <div *ngIf="currentUser && !activateAction(data.user?.id)" class="align-middle float-left"
-                style="margin-top: 15px">
-                <button mat-icon-button title="Edit" aria-label="Edit">
-                    <mat-icon (click)="edit(data)">edit</mat-icon>
-                </button>
-                <button mat-icon-button title="Delete">
-                    <mat-icon (click)="delete(data)">delete</mat-icon>
-                </button>
+
+    <div class="card-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="container">
+                        <div class="row">
+                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('1')" title="Vote up">
+                                <mat-icon>expand_less</mat-icon>
+                            </button>
+
+                        </div>
+                        <div class="row justify-content-center">
+                            {{data.score}}
+                        </div>
+                        <div class="row">
+                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('-1')"  title="Vote up">
+                                <mat-icon>expand_more</mat-icon>
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="quest">
+                        <markdown data="{{data.body}}"></markdown>
+                        <tags [data]="data.tags"></tags>
+                    </div>
+                    <div style="clear: both"></div>
+
+                    <div class=" clearfix">
+                        <button type="button" *ngIf="currentUser && activateAction(data.user?.id) && data.title != null"
+                            class="btn float-right btn-primary btn-lg " (click)="onReply()">Reply to this
+                            question</button>
+                        <div *ngIf="currentUser && activateAction(data.user?.id)" class="align-middle float-left"
+                            style="margin-top: 15px">
+                            <button mat-icon-button title="Edit" aria-label="Edit">
+                                <mat-icon (click)="edit(data)">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button title="Delete">
+                                <mat-icon (click)="delete(data)">delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
+
         </div>
 
         <comments [data]="data.comments" [postId]="data.id"></comments>

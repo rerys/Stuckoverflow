@@ -205,11 +205,11 @@ namespace prid1920_g01.Controllers
 
 
         //Update a post
-        [HttpPut("{id}")] 
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(int id, PostDTO postDTO)
         {
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
-            if (!(postDTO.User.Id == connectedUser.Id  || connectedUser.Role == Role.Admin)) { return BadRequest(); }
+            if (!(postDTO.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
             if (id != postDTO.Id) { return BadRequest(); }
             var post = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
             if (post == null)
@@ -228,24 +228,33 @@ namespace prid1920_g01.Controllers
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
-            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
-            if (!(post.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
             if (post == null)
                 return NotFound();
+            var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
+            if (!(post.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
+
+            if (post.User.Id == connectedUser.Id && !(post.Comments == null && post.Responses == null))
+            {
+                return BadRequest();
+            }
             _context.Posts.Remove(post);
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
 
         [HttpGet("acceptPost/{id}")]
-        public  async Task<ActionResult<PostDTO>> acceptPost(int id)
+        public async Task<ActionResult<PostDTO>> acceptPost(int id)
         {
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             var response = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
             if (response == null) { return NotFound(); }
             var question = response.Parent;
             if (question.User.Id != connectedUser.Id) return BadRequest();
+            if(question.Accpeted != null) return BadRequest();
+            connectedUser.Reputation += 2;
+            response.User.Reputation += 15;
             question.AcceptedAnswerId = response.Id;
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
@@ -254,13 +263,16 @@ namespace prid1920_g01.Controllers
         }
 
         [HttpGet("unAcceptPost/{id}")]
-        public  async Task<ActionResult<PostDTO>> unAcceptPost(int id)
+        public async Task<ActionResult<PostDTO>> unAcceptPost(int id)
         {
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             var response = await _context.Posts.Where(p => p.Id == id).SingleOrDefaultAsync();
             if (response == null) { return NotFound(); }
             var question = response.Parent;
             if (question.User.Id != connectedUser.Id) return BadRequest();
+            if(question.Accpeted == null) return BadRequest();
+            connectedUser.Reputation -= 2;
+            response.User.Reputation -= 15;
             question.AcceptedAnswerId = response.Id;
             question.AcceptedAnswerId = null;
             var res = await _context.SaveChangesAsyncWithValidation();

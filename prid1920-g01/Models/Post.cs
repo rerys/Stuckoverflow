@@ -31,7 +31,8 @@ namespace prid1920_g01.Models
 
         [NotMapped]
         public IEnumerable<Tag> Tags { get => PostTags.Select(p => p.Tag); }
-
+        [NotMapped]
+        public int score {get => Votes.Sum(v => v.UpDown);}
 
 
 

@@ -3,7 +3,10 @@ import { Post } from "src/app/models/post";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { EditPostService } from "src/app/services/edit-post.service";
 import { Router } from "@angular/router";
-import { Role } from "src/app/models/user";
+import { Role, User } from "src/app/models/user";
+import { QuestionComponent } from "../../question/question.component";
+import { Vote } from "src/app/models/vote";
+import { VoteService } from "src/app/services/vote.service";
 
 @Component({
     selector: 'post',
@@ -15,33 +18,36 @@ import { Role } from "src/app/models/user";
 export class PostComponent {
 
     @Input() data: Post;
-    @Input() id: number;
     @Input() accepted: boolean = false;
-    @Input() postToAccept: Post = null;
+
+
 
 
     constructor(public editPostService: EditPostService,
         private authenticationService: AuthenticationService,
-        private router: Router) {
+        private router: Router,
+        private question: QuestionComponent,
+        private voteService: VoteService) {
+
     }
 
     activateAction(id: string) {
-        return !(this.authenticationService.currentUser.id == id || this.authenticationService.currentUser.role == Role.Admin);
+        return (this.authenticationService.currentUser.id == id || this.authenticationService.currentUser.role == Role.Admin);
 
     }
- 
+
     get currentUser() { return this.authenticationService.currentUser; }
 
-    delete(post: Post) { 
+    delete(post: Post) {
         this.editPostService.delete(post).subscribe(res => {
             if (res) {
                 delete this.data;
-                if(this.data == null && this.postToAccept == null){
+                if (this.data == null && this.question.question == null) {
                     this.router.navigate(['/posts'])
                 }
             }
         });
-    } 
+    }
 
     edit(post: Post) {
         var backUp = new Post(post);
@@ -54,33 +60,96 @@ export class PostComponent {
     }
 
     onReply() {
-        this.editPostService.addReply(this.id).subscribe(res => {
+        this.editPostService.addReply(this.question.id).subscribe(res => {
             if (res) {
                 this.data.responses.push(res);
             }
         });
     }
 
-    toAccept(post: Post){
+    toAccept(post: Post) {
 
         this.editPostService.accept(post).subscribe(res => {
             if (res) {
-                this.postToAccept.accepted = post;
+                this.question.accepted = post;
             }
         });
     }
 
-    toClear(post: Post){
+    toClear(post: Post) {
 
         this.editPostService.unAccept(post).subscribe(res => {
             if (res) {
-                this.postToAccept.accepted = null;
+                this.question.accepted = null;
             }
         });
     }
 
-    activateButtonAcceptResponse(){
-        return (this.postToAccept != null && this.currentUser!= null && this.currentUser.id == this.postToAccept.user.id); 
+
+
+    onVote(upDown: string) {
+        var vote = this.data.votes.find(v => v.userId == this.currentUser.id);
+        //var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
+        console.log(upDown);
+        if (vote == null) {
+            this.addVote(upDown);
+        }
+        else if(vote.upDown != upDown){
+            vote.upDown = upDown;
+            this.updateVote(vote);
+        }
+        else if (vote.upDown == upDown) {
+            this.deleteVote();
+        }
+    }
+
+    private addVote(upDown: string) {
+        var newVote = new Vote({});
+        newVote.postId = this.data.id;
+        newVote.upDown = upDown;
+        this.voteService.newVote(newVote).subscribe(res => {
+            if (res) {
+                this.question.refrech();
+            }
+        });
+    }
+
+    private deleteVote() {
+        this.voteService.delete(this.data.id).subscribe(res => {
+            if (res) {
+                this.question.refrech();
+            }
+        });
+    }
+
+    private updateVote(vote: Vote){
+        this.voteService.update(vote).subscribe(res => {
+            if(res){
+                this.question.refrech();
+            }
+        });
+    }
+
+
+    noAccepted() {
+        return this.question.accepted == null;
+    }
+    activateButtonAcceptResponse() {
+        return (
+            this.data.title == null &&
+            this.question.question.user != null &&
+            this.currentUser != null &&
+            this.currentUser.id == this.question.question.user.id);
+    }
+
+    activateVoteUp() {
+        var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
+        return (this.currentUser != null && (vote == null || vote.upDown != "1"));
+    }
+
+    activateVoteDown() {
+        var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.user.id == this.currentUser.id) : null;
+        return (this.currentUser != null && (vote == null || vote.upDown != "-1"));
     }
 
 }

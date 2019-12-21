@@ -150,7 +150,15 @@ namespace prid1920_g01.Models
                     Body = r.Body,
                     Timestamp = r.Timestamp,
                     User = r.User.ToSimpleDTO(),
-                    Comments = r.Comments.ToDTO()
+                    Comments = r.Comments.ToDTO(),
+                    Votes = r.Votes.Select(v => new VoteDTO
+                {
+                    UpDown = v.UpDown,
+                    UserId= v.UserId,
+                    PostId= v.PostId
+                }).ToList(),
+                Score = r.score
+                    
 
 
                 }).ToList(),
@@ -165,10 +173,13 @@ namespace prid1920_g01.Models
                 }).ToList(),
                 Votes = post.Votes.Select(r => new VoteDTO
                 {
-                    UpDown = r.UpDown
+                    UpDown = r.UpDown,
+                    UserId= r.UserId,
+                    PostId= r.PostId
                 }).ToList(),
 
-                Comments = post.Comments.ToDTO()
+                Comments = post.Comments.ToDTO(),
+                Score = post.score
 
             };
 
