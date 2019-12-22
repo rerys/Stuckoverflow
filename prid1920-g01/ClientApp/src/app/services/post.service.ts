@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/post';
 import { map, flatMap, catchError, timestamp } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 
@@ -38,24 +39,25 @@ export class PostService {
   public getRefrechPost(id: number) {
 
     this.getQuestionById(id).subscribe(post => {
-      this.question = post;
-      this.responses = post.responses;
-      this.accepted = post.accepted;
-
-
-      this.emitQuestion();
-      this.emitAccepted();
-      this.emitPost();
+      if(post != null){
+        this.question = post;
+        this.responses = post.responses;
+        this.accepted = post.accepted;
+        this.emitQuestion();
+        this.emitAccepted();
+        this.emitPost();
+      }
+       else{
+        this.router.navigate(['/posts'])
+       }
+    
     });
 
   }
 
 
 
-
-
-
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string,private router: Router) { }
 
 
   getQuestions(filter: string) {

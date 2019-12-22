@@ -27,11 +27,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
 
     public id: number;
-    public userPost: User;
 
     constructor(private postService: PostService,
         private route: ActivatedRoute,
-        public editPostService: EditPostService, ) {
+        public editPostService: EditPostService,
+        private router: Router) {
         this.question = new Post([]);
 
     }
@@ -44,9 +44,8 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
     public refrech() {
 
-        this.questionSubsription = this.postService.questionSubject.subscribe(post => {
+        this.questionSubsription = this.postService.questionSubject.subscribe((post) => {
             this.question = post;
-            this.userPost = post.user;
         });
 
         this.responsesSubsription = this.postService.responsesSubject.subscribe(responses => {
@@ -56,6 +55,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
         this.acceptedSubcription = this.postService.acceptedSubject.subscribe(accepted => {
             this.accepted = accepted;
         });
+       
 
 
 
@@ -63,6 +63,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
         this.postService.emitAllResponses();
         this.postService.emitAccepted();
         this.postService.emitPost();
+        this.postService.emitQuestion();
+        if(this.question == null){
+            //this.router.navigate(['/posts']);
+        }
+
 
 
     }
@@ -71,6 +76,17 @@ export class QuestionComponent implements OnInit, OnDestroy {
         this.questionSubsription.unsubscribe();
         this.acceptedSubcription.unsubscribe();
         this.responsesSubsription.unsubscribe();
+    }
+
+    emit(){
+        this.postService.emitAccepted();
+        this.postService.emitPost();
+        this.postService.emitQuestion();
+
+        if(this.question == null){
+            console.log("dfsdfsdf");
+        }
+
     }
 
 

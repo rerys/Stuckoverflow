@@ -42,7 +42,6 @@ export class AuthenticationService {
           this.currentUser = user;
 
         }
-
         return user;
 
       }));

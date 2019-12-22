@@ -18,7 +18,7 @@ import { VoteService } from "src/app/services/vote.service";
 export class PostComponent {
 
     @Input() data: Post;
-    @Input() accepted: boolean = false;
+    @Input() accepted: boolean = false; 
 
 
 
@@ -35,16 +35,16 @@ export class PostComponent {
         return (this.authenticationService.currentUser.id == id || this.authenticationService.currentUser.role == Role.Admin);
 
     }
+    activateDelete() {
+        return (this.authenticationService.currentUser.role == Role.Admin || (this.isEmpty(this.data.comments) && this.isEmpty(this.data.responses)));
+    }
 
     get currentUser() { return this.authenticationService.currentUser; }
 
     delete(post: Post) {
         this.editPostService.delete(post).subscribe(res => {
             if (res) {
-                delete this.data;
-                if (this.data == null && this.question.question == null) {
-                    this.router.navigate(['/posts'])
-                }
+                this.question.refrech();
             }
         });
     }
@@ -92,7 +92,7 @@ export class PostComponent {
         if (vote == null) {
             this.addVote(upDown);
         }
-        else if(vote.upDown != upDown){
+        else if (vote.upDown != upDown) {
             vote.upDown = upDown;
             this.updateVote(vote);
         }
@@ -120,9 +120,9 @@ export class PostComponent {
         });
     }
 
-    private updateVote(vote: Vote){
+    private updateVote(vote: Vote) {
         this.voteService.update(vote).subscribe(res => {
-            if(res){
+            if (res) {
                 this.question.refrech();
             }
         });
@@ -140,8 +140,22 @@ export class PostComponent {
             this.currentUser.id == this.question.question.user.id);
     }
 
-    activeColor(value: string){
+    activeColor(value: string) {
         var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
         return (this.currentUser != null && vote != null && (vote.upDown == value));
     }
+
+    activateVoteUp() {
+        var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
+        return this.currentUser && (+this.currentUser.reputation >= 15 || (vote != null && vote.upDown == "1") );
+    }
+    activateVoteDown() {
+        var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
+        return this.currentUser && (+this.currentUser.reputation >= 30 || (vote != null && vote.upDown == "-1"));
+    }
+
+    private isEmpty(value: any): boolean {
+        if (value == null || value == undefined || value.length == 0) return true;
+        return false;
+      }
 }

@@ -25,9 +25,9 @@
                 <div class="col-auto">
                     <div class="container">
                         <div class="row">
-                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('1')" title="Vote up"
+                            <button mat-icon-button [disabled]="!activateVoteUp()" (click)="onVote('1')" title="Vote up"
                                 [ngClass]="{
-                                'btn btn-success': currentUser,
+                                'btn btn-success': activeColor('1'),
                                 'up': activeColor('1')
                               }">
                                 <mat-icon>expand_less</mat-icon>
@@ -38,9 +38,9 @@
                             {{data.score}}
                         </div>
                         <div class="row">
-                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('-1')" title="Vote up"
+                            <button mat-icon-button [disabled]="!activateVoteDown()" (click)="onVote('-1')" title="Vote up"
                                 [ngClass]="{
-                                'btn btn-danger': currentUser,
+                                'btn btn-danger': activeColor('-1'),
                                 'down': activeColor('-1')
                               }">
                                 <mat-icon>expand_more</mat-icon>
@@ -106,7 +106,7 @@
                             </div>
                         </div>
 
-
+ 
                     </div>
                     <div style="clear: both"></div>
 
@@ -119,7 +119,7 @@
                             <button mat-icon-button title="Edit" aria-label="Edit">
                                 <mat-icon (click)="edit(data)">edit</mat-icon>
                             </button>
-                            <button mat-icon-button title="Delete">
+                            <button mat-icon-button *ngIf="activateDelete()" title="Delete">
                                 <mat-icon (click)="delete(data)">delete</mat-icon>
                             </button>
                         </div>

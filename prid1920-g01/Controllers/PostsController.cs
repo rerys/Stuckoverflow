@@ -228,15 +228,26 @@ namespace prid1920_g01.Controllers
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
-            if (post == null)
-                return NotFound();
+            if (post == null)return NotFound();
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             if (!(post.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
 
-            if (post.User.Id == connectedUser.Id && !(post.Comments == null && post.Responses == null))
+            if (connectedUser.Role != Role.Admin && post.User.Id == connectedUser.Id && !(post.Comments.Count() == 0 && post.Responses.Count == 0))
             {
                 return BadRequest();
             }
+
+            _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == id select c);
+            _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == id select v);
+            _context.PostTags.RemoveRange(from p in _context.PostTags where p.PostId == id select p);
+            var responses = (from r in _context.Posts where r.ParentId == id select r);
+
+            foreach(var r in responses){
+             _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
+             _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
+            }
+
+            _context.Posts.RemoveRange(responses);
             _context.Posts.Remove(post);
 
             await _context.SaveChangesAsync();
@@ -252,7 +263,7 @@ namespace prid1920_g01.Controllers
             if (response == null) { return NotFound(); }
             var question = response.Parent;
             if (question.User.Id != connectedUser.Id) return BadRequest();
-            if(question.Accpeted != null) return BadRequest();
+            if (question.Accpeted != null) return BadRequest();
             connectedUser.Reputation += 2;
             response.User.Reputation += 15;
             question.AcceptedAnswerId = response.Id;
@@ -270,7 +281,7 @@ namespace prid1920_g01.Controllers
             if (response == null) { return NotFound(); }
             var question = response.Parent;
             if (question.User.Id != connectedUser.Id) return BadRequest();
-            if(question.Accpeted == null) return BadRequest();
+            if (question.Accpeted == null) return BadRequest();
             connectedUser.Reputation -= 2;
             response.User.Reputation -= 15;
             question.AcceptedAnswerId = response.Id;
