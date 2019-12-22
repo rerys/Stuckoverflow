@@ -3,9 +3,6 @@
         'card text-white bg-success mb-3': accepted
       }">
 
-
-
-        <h2 *ngIf="data.title != null">{{data.title}}</h2>
         <div class="row card-text">
             <div class="text-right" *ngIf="activateButtonAcceptResponse()">
                 <button *ngIf="!accepted && noAccepted()" mat-icon-button title="accept">
@@ -15,26 +12,24 @@
                     <mat-icon (click)="toClear(data)">clear</mat-icon>
                 </button>
             </div>
-            <div>
-
-                <small class="text-muted">Posted: {{data.timestamp | date:'short'}}</small>
-            </div>
-
-            <div class="ml-auto">
-                <p>{{data.user?.pseudo}}</p>
-            </div>
+            <h2 *ngIf="data.title != null">{{data.title}}</h2>
+            <h6 *ngIf="data.title == null" class="text-secondary">{{(!accepted ? 'Response' : 'Accepted response' )}}</h6>
         </div>
     </div>
- 
+
 
 
     <div class="card-text">
         <div class="container">
-            <div class="row">
+            <div class="row vote">
                 <div class="col-auto">
                     <div class="container">
                         <div class="row">
-                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('1')" title="Vote up">
+                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('1')" title="Vote up"
+                                [ngClass]="{
+                                'btn btn-success': currentUser,
+                                'up': activeColor('1')
+                              }">
                                 <mat-icon>expand_less</mat-icon>
                             </button>
 
@@ -43,17 +38,75 @@
                             {{data.score}}
                         </div>
                         <div class="row">
-                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('-1')"  title="Vote up">
+                            <button mat-icon-button [disabled]="!currentUser" (click)="onVote('-1')" title="Vote up"
+                                [ngClass]="{
+                                'btn btn-danger': currentUser,
+                                'down': activeColor('-1')
+                              }">
                                 <mat-icon>expand_more</mat-icon>
-                            </button> 
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col  summary">
                     <div class="quest">
                         <markdown data="{{data.body}}"></markdown>
                         <tags [data]="data.tags"></tags>
+
+                        <div class="started fr">
+                            <div class="user-info rounded">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <img src="../../../assets/user.png" alt="" class="bar-sm rounded-circle"
+                                                width="32" height="32">
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <a>{{data.user?.pseudo}}</a>
+
+                                                </div>
+                                                <div class="row info">
+                                                    <div class="container">
+                                                        <div class="row test">
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <i class="material-icons small valign">grade</i>
+                                                                    <span
+                                                                        style="text-align:center">{{data.user?.reputation}}</span>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <i
+                                                                        class="material-icons small valign">speaker_notes</i>
+                                                                    <span>{{data.user?.nbPosts}}</span>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="added text-muted font-italic">
+                                            <a class="text-reset">added <span
+                                                    class="relativetime">{{ data.timestamp | date:'short' }}</span></a>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
                     </div>
                     <div style="clear: both"></div>
 

@@ -1,2 +1,58 @@
 
+.up{
+    background-color: #4CAF50;
+    color: white;
+}
 
+.down{
+    background-color: red;
+    color: white;
+
+}
+.vote{
+    margin-top: 1em;
+}
+.started {
+    width: 200px;
+    float: right;
+    line-height: 18px;
+}
+.float-right, .fr {
+    float: right !important;
+}
+
+.started .reputation-score, .started .user-info {
+    color: #848d95;
+}
+.user-info {
+    box-sizing: border-box;
+    padding: 5px 6px 7px 7px;
+    width: 200px;
+    color: #6a737c;
+    background-color:#C6E9FF;
+}
+
+.info .mat-icon {
+    font-size: 1em; 
+
+  }
+  .info{
+      font-size: 1em;
+      padding-top: 10px;
+  }
+  i.material-icons {
+    font-size: 16px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+  .test{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+  }
+  .summary h3 {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: .5em;
+}

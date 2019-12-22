@@ -23,6 +23,7 @@ export class User {
   posts: List<Post>;
   votes: List<Vote>;
   comments: List<Comment>;
+  nbPosts: string;
 
   constructor(data: any) {
 
@@ -42,6 +43,7 @@ export class User {
       this.posts = data.posts;
       this.votes = data.votes;
       this.comments = data.comments;
+      this.nbPosts = data.nbPosts;
     }
 
   }

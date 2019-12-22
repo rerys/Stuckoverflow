@@ -89,8 +89,6 @@ export class PostComponent {
 
     onVote(upDown: string) {
         var vote = this.data.votes.find(v => v.userId == this.currentUser.id);
-        //var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
-        console.log(upDown);
         if (vote == null) {
             this.addVote(upDown);
         }
@@ -142,14 +140,8 @@ export class PostComponent {
             this.currentUser.id == this.question.question.user.id);
     }
 
-    activateVoteUp() {
+    activeColor(value: string){
         var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.userId == this.currentUser.id) : null;
-        return (this.currentUser != null && (vote == null || vote.upDown != "1"));
+        return (this.currentUser != null && vote != null && (vote.upDown == value));
     }
-
-    activateVoteDown() {
-        var vote = (this.data.votes != null && this.currentUser != null) ? this.data.votes.find(v => v.user.id == this.currentUser.id) : null;
-        return (this.currentUser != null && (vote == null || vote.upDown != "-1"));
-    }
-
 }

@@ -63,7 +63,8 @@ namespace prid1920_g01.Models
             {
                 Id = user.Id,
                 Pseudo = user.Pseudo,
-                Reputation = user.Reputation
+                Reputation = user.Reputation,
+                NbPosts = user.NbPosts
             };
         }
         public static List<UserDTO> ToSimpleDTO(this IEnumerable<User> users)

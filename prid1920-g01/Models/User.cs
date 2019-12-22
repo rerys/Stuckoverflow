@@ -48,6 +48,8 @@ namespace prid1920_g01.Models
         public virtual IList<Post> Posts { get; set; } = new List<Post>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
+        [NotMapped]
+        public int NbPosts {get => Posts.Count();}
 
 
         public int? Age

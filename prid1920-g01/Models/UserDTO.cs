@@ -15,5 +15,6 @@ namespace prid1920_g01.Models{
         public IEnumerable<PostDTO> Posts { get; set; }
         public IEnumerable<VoteDTO> Votes { get; set; }
         public IEnumerable<CommentDTO> Comments { get; set; } 
+        public int NbPosts {get; set;}
     }
 }

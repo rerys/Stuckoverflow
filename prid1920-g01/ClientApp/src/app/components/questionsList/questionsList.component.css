@@ -201,6 +201,7 @@ a {
     padding: 5px 6px 7px 7px;
     width: 200px;
     color: #6a737c;
+    background-color:#C6E9FF;
 }
  div {
     margin: 0;
@@ -211,3 +212,17 @@ a {
     font-size: 100%;
     vertical-align: baseline;
 }
+.info .mat-icon {
+    font-size: 1em; 
+
+  }
+  .info{
+      font-size: 1em;
+      padding-top: 10px;
+  }
+  i.material-icons {
+    font-size: 16px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }

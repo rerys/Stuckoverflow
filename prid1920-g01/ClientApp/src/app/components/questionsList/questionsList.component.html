@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <button type="button"  *ngIf="currentUser" class="btn btn-secondary" (click)="onCreate()" >Ask
+        <button type="button" *ngIf="currentUser" class="btn btn-secondary" (click)="onCreate()">Ask
             question</button>
 
         <div class="container controle">
@@ -44,17 +44,17 @@
             <div class="statscontainer">
                 <div class="stats">
                     <div class="vote">
-                        <div class="votes">
+                        <div class="votes rounded">
                             <span class="vote-count-post "><strong>{{ p.score }}</strong></span>
                             <div class="viewcount">votes</div>
                         </div>
                     </div>
-                    <div class="status unanswered" [ngClass]="{
+                    <div class="status unanswered rounded" [ngClass]="{
                         'answer': p.responses.length > 0 && p.accepted == null,
                         'accepted': p.accepted != null
                       }">
                         <strong>{{ p.responses.length }}</strong>
-                        answers 
+                        answers
                     </div>
                 </div>
             </div>
@@ -66,23 +66,57 @@
                 <tags [data]="p.tags"></tags>
 
                 <div class="started fr">
-                    <div class="user-info user-hover">
-                        <div class="user-details">
-                            <a href="#">{{p.user.pseudo}}</a>
+                        <div class="user-info rounded">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <img src="../../../assets/user.png" alt="" class="bar-sm rounded-circle"
+                                            width="32" height="32">
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="container">
+                                            <div class="row">
+                                                <a>{{p.user?.pseudo}}</a>
+
+                                            </div>
+                                            <div class="row info">
+                                                <div class="container">
+                                                    <div class="row test">
+                                                        <div class="col">
+                                                            <div class="row">
+                                                                <i class="material-icons small valign">grade</i>
+                                                                <span
+                                                                    style="text-align:center">{{p.user?.reputation}}</span>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="row">
+                                                                <i
+                                                                    class="material-icons small valign">speaker_notes</i>
+                                                                <span>{{p.user?.nbPosts}}</span>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="added text-muted font-italic">
+                                        <a class="text-reset">added <span
+                                                class="relativetime">{{ p.timestamp | date:'short' }}</span></a>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
                         </div>
-
-                        <img src="../../../assets/user.png" alt="" class="bar-sm" width="32" height="32">
-
-                        <div class="added text-muted font-italic">
-                            <a href="#" class="text-reset">added <span title="2019-11-30 18:15:09Z"
-                                    class="relativetime">{{ p.timestamp | date:'short' }}</span></a>
-                        </div>
-
                     </div>
-                </div>
             </div>
-
-
         </div>
 
     </div>
