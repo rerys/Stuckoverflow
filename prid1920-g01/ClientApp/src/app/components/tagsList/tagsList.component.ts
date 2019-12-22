@@ -18,7 +18,7 @@ import { Role } from 'src/app/models/user';
 
 export class TagsListComponent implements AfterViewInit, OnDestroy {
 
-    displayedColumns: string[] = ['name', 'actions'];
+    displayedColumns: string[] = ['name','posts', 'actions'];
     dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
