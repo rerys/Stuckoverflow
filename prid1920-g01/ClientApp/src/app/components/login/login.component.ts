@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
     signUp() {
         const user = new User({});
 
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: true } });
+        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: true }, height: '90%' });
 
         dlg.beforeClose().subscribe(res => {
 

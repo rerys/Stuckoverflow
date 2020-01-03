@@ -162,7 +162,7 @@ namespace prid1920_g01.Models
                     
 
 
-                }).ToList(),
+                }).OrderByDescending(p => p.Score).ThenByDescending(p => p.Timestamp).ToList(),
 
                 Accepted = acc,
 

@@ -64,12 +64,6 @@ export class QuestionComponent implements OnInit, OnDestroy {
         this.postService.emitAccepted();
         this.postService.emitPost();
         this.postService.emitQuestion();
-        if(this.question == null){
-            //this.router.navigate(['/posts']);
-        }
-
-
-
     }
 
     ngOnDestroy() {
@@ -77,17 +71,5 @@ export class QuestionComponent implements OnInit, OnDestroy {
         this.acceptedSubcription.unsubscribe();
         this.responsesSubsription.unsubscribe();
     }
-
-    emit(){
-        this.postService.emitAccepted();
-        this.postService.emitPost();
-        this.postService.emitQuestion();
-
-        if(this.question == null){
-            console.log("dfsdfsdf");
-        }
-
-    }
-
 
 }

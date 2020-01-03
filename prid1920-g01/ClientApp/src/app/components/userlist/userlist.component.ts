@@ -63,7 +63,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
     edit(user: User) {
 
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false, signup: false } });
+        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false, signup: false }, height: '90%' });
         dlg.beforeClose().subscribe(res => {
             if (res) {
                 _.assign(user, res);
@@ -92,7 +92,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
     create() {
         const user = new User({});
-        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: false } });
+        const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true, signup: false }, height: '90%' });
 
         dlg.beforeClose().subscribe(res => {
             if (res) {

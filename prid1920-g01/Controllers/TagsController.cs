@@ -100,6 +100,7 @@ namespace prid1920_g01.Controllers
             if (tag == null)
                 return NotFound();
 
+            _context.PostTags.RemoveRange(from t in _context.PostTags where t.TagId == id select t);
             _context.Tags.Remove(tag);
             await _context.SaveChangesAsync();
 
