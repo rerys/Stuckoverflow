@@ -172,7 +172,7 @@ namespace prid1920_g01.Controllers
 
         //Create new Post
         [HttpPost]
-        public async Task<ActionResult<PostDTO>> PostPost(PostDTO data)
+        public async Task<IActionResult> PostPost(PostDTO data)
         {
 
             var user = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
@@ -190,7 +190,8 @@ namespace prid1920_g01.Controllers
 
             if (!res.IsEmpty)
                 return BadRequest(res);
-            return CreatedAtAction(nameof(GetQuestionByBody), new { Body = newPost.Body }, newPost.ToDTO());
+            //return CreatedAtAction(nameof(GetQuestionByBody), new { Body = newPost.Body }, newPost.ToDTO());
+            return NoContent();
         }
 
         [HttpPost("{idParent}")]

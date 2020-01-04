@@ -119,15 +119,14 @@ export class PostService {
   }
 
 
-  public add(p: Post): Observable<Post> {
+  public add(p: Post): Observable<boolean> {
 
     return this.http.post<Post>(`${this.baseUrl}api/posts`, p).pipe(
-      map(res => !res ? null : new Post(res)),
+      map(res => true),
       catchError(err => {
         console.error(err);
-        return of(null);
-      }
-      )
+        return of(false);
+      })
     );
   }
 

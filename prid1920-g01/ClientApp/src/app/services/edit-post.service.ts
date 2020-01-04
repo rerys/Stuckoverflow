@@ -16,7 +16,7 @@ export class EditPostService implements OnDestroy {
         public snackBar: MatSnackBar) { }
 
 
-    create(): Observable<Post> {
+    create(): Observable<boolean> {
         const post = new Post({
             'tags': []
         });
@@ -27,12 +27,12 @@ export class EditPostService implements OnDestroy {
         });
 
 
-        return dlg.beforeClose().pipe(
+        return dlg.beforeClose().pipe( 
             flatMap(res => {
                 if (res) {
                     return this.postService.add(res);
                 } else
-                    return of(null);
+                    return of(false);
             })
         );
         //TODO add snack bar
