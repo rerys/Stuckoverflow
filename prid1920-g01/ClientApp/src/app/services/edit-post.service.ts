@@ -17,7 +17,9 @@ export class EditPostService implements OnDestroy {
 
 
     create(): Observable<Post> {
-        const post = new Post({});
+        const post = new Post({
+            'tags': []
+        });
 
         const dlg = this.dialog.open(EditPostComponent, {
             data: { post, isNew: true }, width: '80%',

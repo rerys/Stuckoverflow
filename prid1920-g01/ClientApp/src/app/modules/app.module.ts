@@ -27,6 +27,9 @@ import { TagsComponent } from '../components/views/view-tags/view-tags.component
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component'
 import { TagsListComponent } from '../components/tagsList/tagsList.component';
 import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
+import { ChipsTagsComponent } from '../components/chips-tags/chips-tags';
+import {MatChipsModule} from '@angular/material/chips'; 
+import { MatAutocompleteModule } from '@angular/material';
 
 
 @NgModule({
@@ -50,7 +53,8 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     TagsComponent,
     EditCommentComponent,
     TagsListComponent,
-    EditTagComponent
+    EditTagComponent,
+    ChipsTagsComponent
 
   ],
 
@@ -71,6 +75,8 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     BrowserAnimationsModule,
     SharedModule,
     AceEditorModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     MarkdownModule.forRoot(),
 
   ],

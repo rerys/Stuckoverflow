@@ -133,7 +133,9 @@ namespace prid1920_g01.Models
             if (post.Accpeted != null)
             {
                 acc = post.Accpeted.ToDTO();
-            }else{
+            }
+            else
+            {
                 acc = null;
             }
 
@@ -153,30 +155,23 @@ namespace prid1920_g01.Models
                     User = r.User.ToSimpleDTO(),
                     Comments = r.Comments.ToDTO(),
                     Votes = r.Votes.Select(v => new VoteDTO
-                {
-                    UpDown = v.UpDown,
-                    UserId= v.UserId,
-                    PostId= v.PostId
-                }).ToList(),
-                Score = r.score
-                    
-
+                    {
+                        UpDown = v.UpDown,
+                        UserId = v.UserId,
+                        PostId = v.PostId
+                    }).ToList(),
+                    Score = r.score
 
                 }).OrderByDescending(p => p.Score).ThenByDescending(p => p.Timestamp).ToList(),
 
                 Accepted = acc,
 
-                Tags = post.Tags.Select(t => new TagDTO
-                {
-                    Id = t.Id,
-                    Name = t.Name
-
-                }).ToList(),
+                Tags = post.Tags.ToDTO(),
                 Votes = post.Votes.Select(r => new VoteDTO
                 {
                     UpDown = r.UpDown,
-                    UserId= r.UserId,
-                    PostId= r.PostId
+                    UserId = r.UserId,
+                    PostId = r.PostId
                 }).ToList(),
 
                 Comments = post.Comments.ToDTO(),
@@ -278,8 +273,7 @@ namespace prid1920_g01.Models
             {
 
                 Id = tag.Id,
-                Name = tag.Name,
-                Posts = tag.Posts.ToDTO()
+                Name = tag.Name
 
             };
         }
@@ -297,7 +291,6 @@ namespace prid1920_g01.Models
             {
                 Id = t.Id,
                 Name = t.Name,
-                // Posts = t.Posts.ToOBJ()
             };
         }
 
@@ -320,9 +313,8 @@ namespace prid1920_g01.Models
             return new VoteDTO
             {
                 UpDown = vote.UpDown,
-                User = vote.User.ToSimpleDTO(),
-                Post = vote.Post.ToDTO()
-
+                UserId = vote.UserId,
+                PostId = vote.PostId
             };
         }
 

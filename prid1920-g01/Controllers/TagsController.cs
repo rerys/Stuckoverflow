@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using prid1920_g01.Helpers;
 
 namespace prid1920_g01.Controllers
-{ 
+{
 
     [Authorize]
     [Route("api/[controller]")]
@@ -35,6 +35,12 @@ namespace prid1920_g01.Controllers
             return (await _context.Tags.ToListAsync()).ToDTO();
         }
 
+        [HttpGet("find")]
+        [HttpGet("find/{filter}")]
+        public async Task<ActionResult<IEnumerable<TagDTO>>> find(string filter)
+        {
+            return (await _context.Tags.Where(t => t.Name.Contains(filter)).ToListAsync()).ToDTO();
+        }
 
         //méthode GET
         //retourne un Tag par son nom 

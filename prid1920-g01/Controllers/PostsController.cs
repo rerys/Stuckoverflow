@@ -179,7 +179,15 @@ namespace prid1920_g01.Controllers
             var newPost = data.ToOBJ();
             newPost.UserId = user.Id;
             _context.Posts.Add(newPost);
+
+            foreach (var t in data.Tags)
+            {
+                var tag = new PostTag();
+                tag.TagId = t.Id;
+                newPost.PostTags.Add(tag);
+            }
             var res = await _context.SaveChangesAsyncWithValidation();
+
             if (!res.IsEmpty)
                 return BadRequest(res);
             return CreatedAtAction(nameof(GetQuestionByBody), new { Body = newPost.Body }, newPost.ToDTO());
@@ -216,6 +224,15 @@ namespace prid1920_g01.Controllers
                 return NotFound();
             post.Title = postDTO.Title;
             post.Body = postDTO.Body;
+
+            _context.PostTags.RemoveRange(from p in _context.PostTags where p.PostId == post.Id select p);
+
+            foreach (var t in postDTO.Tags)
+            {
+                var tag = new PostTag();
+                tag.TagId = t.Id;
+                post.PostTags.Add(tag);
+            }
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
                 return BadRequest(res);
@@ -228,7 +245,7 @@ namespace prid1920_g01.Controllers
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
-            if (post == null)return NotFound();
+            if (post == null) return NotFound();
             var connectedUser = await _context.Users.Where(u => u.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             if (!(post.User.Id == connectedUser.Id || connectedUser.Role == Role.Admin)) { return BadRequest(); }
 
@@ -242,9 +259,10 @@ namespace prid1920_g01.Controllers
             _context.PostTags.RemoveRange(from p in _context.PostTags where p.PostId == id select p);
             var responses = (from r in _context.Posts where r.ParentId == id select r);
 
-            foreach(var r in responses){
-             _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
-             _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
+            foreach (var r in responses)
+            {
+                _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
+                _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
             }
 
             _context.Posts.RemoveRange(responses);

@@ -7,6 +7,7 @@ import { Role, User } from "src/app/models/user";
 import { QuestionComponent } from "../../question/question.component";
 import { Vote } from "src/app/models/vote";
 import { VoteService } from "src/app/services/vote.service";
+import { Tag } from "src/app/models/tag";
 
 @Component({
     selector: 'post',
@@ -51,9 +52,11 @@ export class PostComponent {
 
     edit(post: Post) {
         var backUp = new Post(post);
+        var backUpTags = new Tag(post.tags);
         this.editPostService.edit(post).subscribe(res => {
             if (!res) {
-                post.body = backUp.body;
+                //post.body = backUp.body;
+                this.question.refrech();
             }
         }
         );
@@ -62,7 +65,8 @@ export class PostComponent {
     onReply() {
         this.editPostService.addReply(this.question.id).subscribe(res => {
             if (res) {
-                this.data.responses.push(res);
+                //this.data.responses.push(res);
+                this.question.refrech();
             }
         });
     }

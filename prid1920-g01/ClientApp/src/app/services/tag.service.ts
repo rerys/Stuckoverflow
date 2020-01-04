@@ -16,6 +16,12 @@ export class TagService {
       );
   }
 
+  find(filter: string) {
+    return this.http.get<Tag[]>(`${this.baseUrl}api/tags/find/${filter}`).pipe(
+        map(res => res.map(t => new Tag(t)))
+      );
+  }
+
   getByName(name: string) {
 
     return this.http.get<Tag>(`${this.baseUrl}api/tags/${name}`).pipe(
