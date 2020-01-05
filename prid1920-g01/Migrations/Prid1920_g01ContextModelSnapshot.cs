@@ -115,12 +115,13 @@ namespace prid1920_g01.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                        .IsRequired();
 
                     b.Property<string>("Pseudo")
                         .IsRequired()
                         .HasMaxLength(10);
+
+                    b.Property<string>("RefreshToken");
 
                     b.Property<int>("Reputation");
 

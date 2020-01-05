@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using prid1920_g01.Helpers;
 
 namespace prid1920_g01.Models
 {
@@ -26,7 +27,8 @@ namespace prid1920_g01.Models
                 BirthDate = user.BirthDate,
                 Reputation = user.Reputation,
                 Role = user.Role,
-                Token = user.Token
+                Token = user.Token,
+                RefreshToken = user.RefreshToken
             };
         }
 
@@ -80,24 +82,21 @@ namespace prid1920_g01.Models
         }
 
         //convertisseur d'un UserDTO vers un User
-        public static User ToOBJ(this UserDTO u)
+        public static User ToOBJ(this UserDTO u) => new User
         {
-            return new User
-            {
-                Id = u.Id,
-                Pseudo = u.Pseudo,
-                Email = u.Email,
-                Password = u.Password,
-                LastName = u.LastName,
-                FirstName = u.FirstName,
-                BirthDate = u.BirthDate,
-                Reputation = u.Reputation,
-                Role = u.Role,
-                // Posts = u.Posts.ToOBJ(),
-                // Votes = u.Votes.ToOBJ(),
-                // Comments = u.Comments.ToOBJ()
-            };
-        }
+            Id = u.Id,
+            Pseudo = u.Pseudo,
+            Email = u.Email,
+            Password = TokenHelper.GetPasswordHash(u.Password),
+            LastName = u.LastName,
+            FirstName = u.FirstName,
+            BirthDate = u.BirthDate,
+            Reputation = u.Reputation,
+            Role = u.Role,
+            // Posts = u.Posts.ToOBJ(),
+            // Votes = u.Votes.ToOBJ(),
+            // Comments = u.Comments.ToOBJ()
+        };
 
         //convertisseur d'une liste UserDTO vers une liste User
         public static List<User> ToOBJ(this IEnumerable<UserDTO> users)

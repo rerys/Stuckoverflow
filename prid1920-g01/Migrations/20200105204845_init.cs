@@ -28,13 +28,14 @@ namespace prid1920_g01.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Pseudo = table.Column<string>(maxLength: 10, nullable: false),
-                    Password = table.Column<string>(maxLength: 10, nullable: false),
+                    Password = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     BirthDate = table.Column<DateTime>(nullable: true),
                     Reputation = table.Column<int>(nullable: false),
-                    Role = table.Column<int>(nullable: false)
+                    Role = table.Column<int>(nullable: false),
+                    RefreshToken = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

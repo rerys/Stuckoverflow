@@ -20,6 +20,7 @@ export class User {
   reputation: string;
   role: Role;
   token: string;
+  refreshToken: string;
   posts: List<Post>;
   votes: List<Vote>;
   comments: List<Comment>;
@@ -40,6 +41,7 @@ export class User {
       this.reputation = data.reputation;
       this.role = data.role || Role.Member;
       this.token = data.token;
+      this.refreshToken = data.refreshToken;
       this.posts = data.posts;
       this.votes = data.votes;
       this.comments = data.comments;

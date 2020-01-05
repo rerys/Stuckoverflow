@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using prid1920_g01.Helpers;
 
 namespace prid1920_g01.Models
 {
@@ -28,11 +29,11 @@ namespace prid1920_g01.Models
                         {
 
                             context.Users.AddRange(
-                                new User { Id = 1, Pseudo = "ben", Password = "ben", LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com" },
-                                new User { Id = 2, Pseudo = "bruno", Password = "bruno", LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
-                                new User { Id = 3, Pseudo = "admin", Password = "admin", LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
-                                new User { Id = 4, Pseudo = "boris", Password = "boris", LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
-                                new User { Id = 5, Pseudo = "alain", Password = "alain", LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" }
+                                new User { Id = 1, Pseudo = "ben", Password = TokenHelper.GetPasswordHash("ben"), LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com" },
+                                new User { Id = 2, Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
+                                new User { Id = 3, Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
+                                new User { Id = 4, Pseudo = "boris", Password = TokenHelper.GetPasswordHash("boris"), LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
+                                new User { Id = 5, Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" }
                             );
                             context.SaveChanges();
                         }

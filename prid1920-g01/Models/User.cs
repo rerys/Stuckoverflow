@@ -24,7 +24,7 @@ namespace prid1920_g01.Models
         public string Pseudo { get; set; }
 
         [Required(ErrorMessage = "Required")]
-        [StringLength(10, MinimumLength = 3, ErrorMessage = "Remark must have min length of 3 and max Length of 10")]
+        //[StringLength(10, MinimumLength = 3, ErrorMessage = "Remark must have min length of 3 and max Length of 10")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Required")]
@@ -45,6 +45,7 @@ namespace prid1920_g01.Models
         public Role Role { get; set; } = Role.Member;
         [NotMapped]
         public string Token { get; set; }
+         public string RefreshToken { get; set; }
         public virtual IList<Post> Posts { get; set; } = new List<Post>();
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();

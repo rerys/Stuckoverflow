@@ -58,4 +58,15 @@ export class AuthenticationService {
 
   }
 
+  refresh() {
+    return this.http.post<User>(`${this.baseUrl}api/users/refresh`, this.currentUser).pipe(
+      map(res => {
+        this.currentUser.token = res.token;
+        this.currentUser.refreshToken = res.refreshToken;
+        sessionStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        return res;
+      })
+    );
+  }
+
 }

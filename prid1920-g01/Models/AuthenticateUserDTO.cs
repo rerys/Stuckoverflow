@@ -14,6 +14,7 @@ namespace prid1920_g01.Models
         public int Reputation { get; set; }
         public Role Role { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 
 }

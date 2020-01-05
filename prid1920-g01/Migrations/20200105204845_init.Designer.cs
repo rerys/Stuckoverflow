@@ -9,7 +9,7 @@ using prid1920_g01.Models;
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    [Migration("20191221162357_init")]
+    [Migration("20200105204845_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,12 +117,13 @@ namespace prid1920_g01.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                        .IsRequired();
 
                     b.Property<string>("Pseudo")
                         .IsRequired()
                         .HasMaxLength(10);
+
+                    b.Property<string>("RefreshToken");
 
                     b.Property<int>("Reputation");
 
