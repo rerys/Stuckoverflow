@@ -43,16 +43,16 @@ namespace prid1920_g01.Controllers
             };
             _context.Votes.Add(vote);
             var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty) { return BadRequest(res); }
             //recuperation du nouveau vote en DB
-            //var newVote = await _context.Votes.Where(v => v.PostId == data.PostId && v.UserId == connectedUser.Id).SingleOrDefaultAsync();
+            var newVote = await _context.Votes.Where(v => v.PostId == data.PostId && v.UserId == connectedUser.Id).SingleOrDefaultAsync();
             //recuperation du l'user du post 
-            //var poster = await _context.Users.Where(u => u.Id == newVote.UserId).SingleOrDefaultAsync();
-            //setReputation(newVote, poster, connectedUser);
-            //res = await _context.SaveChangesAsyncWithValidation();
+            var poster = await _context.Posts.FindAsync(data.PostId);
+            var user = poster.User;
+            setReputation(newVote, user, connectedUser);
+            res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty) { return BadRequest(res); }
             return NoContent();
-            //return CreatedAtAction(nameof(GetOne), new { pseudo = newUser.Pseudo }, newUser.ToDTO());
-
         }
 
         [HttpDelete("{id}")]
@@ -62,14 +62,12 @@ namespace prid1920_g01.Controllers
             var existVote = await _context.Votes.Where(v => v.PostId == id && v.User.Pseudo == User.Identity.Name).SingleOrDefaultAsync();
             if (existVote == null) return NotFound();
             if (existVote.UserId != connectedUser.Id) return BadRequest();
-            //var poster = await _context.Users.Where(u => u.Id == existVote.UserId).SingleOrDefaultAsync();
-            //restorReputation(existVote, poster, connectedUser);
             _context.Votes.Remove(existVote);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
- 
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVote(int id, VoteDTO data)
         {
@@ -77,12 +75,13 @@ namespace prid1920_g01.Controllers
             var existVote = await _context.Votes.Where(v => v.PostId == data.PostId && v.UserId == data.UserId).SingleOrDefaultAsync();
             if (existVote == null) return NotFound();
             if (existVote.User.Id != connectedUser.Id) return BadRequest();
-            if (existVote.UpDown != data.UpDown) 
+            if (existVote.UpDown != data.UpDown)
             {
-                //var poster = await _context.Users.Where(u => u.Id == existVote.UserId).SingleOrDefaultAsync();
-                //restorReputation(existVote, poster, connectedUser);
+                var poster = await _context.Posts.FindAsync(data.PostId);
+                var user = poster.User;
+                restorReputation(existVote, user, connectedUser);
                 existVote.UpDown = data.UpDown;
-                //setReputation(existVote, poster, connectedUser);
+                setReputation(existVote, user, connectedUser);
                 var res = await _context.SaveChangesAsyncWithValidation();
                 if (!res.IsEmpty)
                     return BadRequest(res);

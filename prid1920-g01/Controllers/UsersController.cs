@@ -114,7 +114,7 @@ namespace prid1920_g01.Controllers
             user.Reputation = userDTO.Reputation;
             if (userDTO.Password != null)
             {
-                user.Password =  TokenHelper.GetPasswordHash(userDTO.Password);
+                user.Password = TokenHelper.GetPasswordHash(userDTO.Password);
             }
 
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -133,6 +133,29 @@ namespace prid1920_g01.Controllers
 
             if (user == null)
                 return NotFound();
+
+            // var posts = (from p in _context.Posts where p.UserId == user.Id select p);
+
+            // foreach (var p in posts)
+            // {
+
+            //     _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == p.Id select c);
+            //     _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == p.Id select v);
+            //     _context.PostTags.RemoveRange(from post in _context.PostTags where post.PostId == p.Id select post);
+            //     var responses = (from r in _context.Posts where r.ParentId == p.Id select r);
+
+            //     foreach (var r in responses)
+            //     {
+            //         _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
+            //         _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
+            //     }
+
+            //     _context.Posts.RemoveRange(responses);
+            //     _context.Posts.Remove(p); 
+            //     await _context.SaveChangesAsync(); 
+
+            // }
+
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
