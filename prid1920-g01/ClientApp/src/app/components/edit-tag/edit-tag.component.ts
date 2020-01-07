@@ -21,6 +21,7 @@ import { Role } from 'src/app/models/user';
 export class EditTagComponent {
 
     public frm: FormGroup;
+    public ctlId: FormControl;
     public ctlName: FormControl; 
 
     public isNew: boolean;
@@ -40,6 +41,7 @@ export class EditTagComponent {
 
 
         this.frm = this.fb.group({
+            id: this.ctlId,
             name: this.ctlName
         });
 

@@ -101,6 +101,7 @@ export class TagsListComponent implements AfterViewInit, OnDestroy {
 
         dlg.beforeClose().subscribe(res => {
             if (res) {
+                res.posts = [];
                 this.dataSource.data = [...this.dataSource.data, new Tag(res)];
                 this.tagService.add(res).subscribe(res => {
                     if (!res) {

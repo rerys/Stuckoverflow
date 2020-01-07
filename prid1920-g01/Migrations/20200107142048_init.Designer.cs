@@ -9,7 +9,7 @@ using prid1920_g01.Models;
 namespace prid1920_g01.Migrations
 {
     [DbContext(typeof(Prid1920_g01Context))]
-    [Migration("20200105204845_init")]
+    [Migration("20200107142048_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

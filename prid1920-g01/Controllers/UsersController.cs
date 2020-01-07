@@ -72,6 +72,13 @@ namespace prid1920_g01.Controllers
         public async Task<ActionResult<UserDTO>> PostUser(UserDTO data)
         {
             var newUser = data.ToOBJ();
+            var passwordLength = data.Password.Length;
+            if (!(passwordLength >= 3 && passwordLength <= 10))
+            {
+                var err = new ValidationErrors().Add("Remark must have min length of 3 and max Length of 10", nameof(newUser.Password));
+                return BadRequest(err);
+            }
+
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty)
@@ -86,6 +93,12 @@ namespace prid1920_g01.Controllers
         {
 
             var newUser = data.ToOBJ();
+            var passwordLength = data.Password.Length;
+            if (!(passwordLength >= 3 && passwordLength <= 10))
+            {
+                var err = new ValidationErrors().Add("Remark must have min length of 3 and max Length of 10", nameof(newUser.Password));
+                return BadRequest(err);
+            }
             newUser.Reputation = 1;
             newUser.Role = Role.Member;
             _context.Users.Add(newUser);
@@ -114,6 +127,12 @@ namespace prid1920_g01.Controllers
             user.Reputation = userDTO.Reputation;
             if (userDTO.Password != null)
             {
+                var passwordLength = userDTO.Password.Length;
+                if (!(passwordLength >= 3 && passwordLength <= 10))
+                {
+                    var err = new ValidationErrors().Add("Remark must have min length of 3 and max Length of 10", nameof(user.Password));
+                    return BadRequest(err);
+                }
                 user.Password = TokenHelper.GetPasswordHash(userDTO.Password);
             }
 
@@ -134,27 +153,32 @@ namespace prid1920_g01.Controllers
             if (user == null)
                 return NotFound();
 
-            // var posts = (from p in _context.Posts where p.UserId == user.Id select p);
 
-            // foreach (var p in posts)
-            // {
+            //delete de tous les commentaires de l'user
+            _context.Comments.RemoveRange(from c in _context.Comments where c.UserId == user.Id select c);
+            //delete de tous les votes de l'user
+            _context.Votes.RemoveRange(from v in _context.Votes where v.UserId == user.Id select v);
+            //delete de tous les posts de l'user à supprimer 
+            //recursion: suppression de toutes les réponses si le post est une question
+            var posts = (from p in _context.Posts where p.UserId == user.Id select p);
+            foreach (var p in posts)
+            {
 
-            //     _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == p.Id select c);
-            //     _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == p.Id select v);
-            //     _context.PostTags.RemoveRange(from post in _context.PostTags where post.PostId == p.Id select post);
-            //     var responses = (from r in _context.Posts where r.ParentId == p.Id select r);
+                _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == p.Id select c);
+                _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == p.Id select v);
+                _context.PostTags.RemoveRange(from post in _context.PostTags where post.PostId == p.Id select post);
+                var responses = (from r in _context.Posts where r.ParentId == p.Id select r);
 
-            //     foreach (var r in responses)
-            //     {
-            //         _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
-            //         _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
-            //     }
+                foreach (var r in responses)
+                {
+                    _context.Comments.RemoveRange(from c in _context.Comments where c.PostId == r.Id select c);
+                    _context.Votes.RemoveRange(from v in _context.Votes where v.PostId == r.Id select v);
+                }
 
-            //     _context.Posts.RemoveRange(responses);
-            //     _context.Posts.Remove(p); 
-            //     await _context.SaveChangesAsync(); 
-
-            // }
+                _context.Posts.RemoveRange(responses);
+                await _context.SaveChangesAsync();
+                _context.Posts.Remove(p);
+            }
 
 
             _context.Users.Remove(user);

@@ -64,11 +64,11 @@ namespace prid1920_g01.Controllers
         {
 
             var newTag = data.ToOBJ();
-            _context.Tags.Add(newTag);
+            _context.Tags.Add(newTag); 
 
             var res = await _context.SaveChangesAsyncWithValidation();
             if (!res.IsEmpty) return BadRequest(res);
-            return CreatedAtAction(nameof(GetOne), new { pseudo = newTag.Name }, newTag.ToDTO());
+            return CreatedAtAction(nameof(GetOne), new { name = newTag.Name }, newTag.ToDTO()); 
 
         }
 

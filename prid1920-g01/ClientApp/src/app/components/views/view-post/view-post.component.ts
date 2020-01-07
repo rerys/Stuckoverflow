@@ -75,7 +75,7 @@ export class PostComponent {
 
         this.editPostService.accept(post).subscribe(res => {
             if (res) {
-                this.question.accepted = post;
+                this.question.refrech();
             }
         });
     }
@@ -84,7 +84,7 @@ export class PostComponent {
 
         this.editPostService.unAccept(post).subscribe(res => {
             if (res) {
-                this.question.accepted = null;
+                this.question.refrech();
             }
         });
     }

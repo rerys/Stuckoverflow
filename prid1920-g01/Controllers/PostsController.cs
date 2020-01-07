@@ -267,6 +267,7 @@ namespace prid1920_g01.Controllers
             }
 
             _context.Posts.RemoveRange(responses);
+            await _context.SaveChangesAsync();
             _context.Posts.Remove(post);
 
             await _context.SaveChangesAsync();

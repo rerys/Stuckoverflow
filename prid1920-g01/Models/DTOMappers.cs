@@ -284,6 +284,17 @@ namespace prid1920_g01.Models
         };
     }
 
+        public static TagDTO SimpleDTO(this Tag tag)
+    {
+        return new TagDTO
+        {
+
+            Id = tag.Id,
+            Name = tag.Name,
+            Posts = new PostDTO[0]
+        };
+    }
+
     //convertisseur d'une liste Tag vers un TagDTO
     public static List<TagDTO> ToDTO(this IEnumerable<Tag> tags)
     {

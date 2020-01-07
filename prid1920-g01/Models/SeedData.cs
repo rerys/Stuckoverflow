@@ -29,9 +29,9 @@ namespace prid1920_g01.Models
                         {
 
                             context.Users.AddRange(
-                                new User { Id = 1, Pseudo = "ben", Password = TokenHelper.GetPasswordHash("ben"), LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com" },
-                                new User { Id = 2, Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
-                                new User { Id = 3, Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
+                                new User { Id = 1, Pseudo = "ben", Password = TokenHelper.GetPasswordHash("ben"), LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com", Reputation = 50 },
+                                new User { Id = 2, Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com", Reputation = 50 },
+                                new User { Id = 3, Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin, Reputation = 100 },
                                 new User { Id = 4, Pseudo = "boris", Password = TokenHelper.GetPasswordHash("boris"), LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
                                 new User { Id = 5, Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" }
                             );
@@ -365,7 +365,16 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                     ParentId = 19,
                                     UserId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
+                                },
+                                new Post()
+                                {
+                                    Id = 21,
+                                    Title = "Q6",
+                                    Body = "Q6",
+                                    UserId = 3,
+                                    Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
                                 }
+                                
                             );
 
                             context.SaveChanges();
